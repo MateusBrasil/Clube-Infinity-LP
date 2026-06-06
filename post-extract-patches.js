@@ -226,10 +226,36 @@ for (const [from, to] of arrowBoxBefore) {
     '<div class="bg-accent rounded-tr-[3rem] rounded-tl-[3rem] pt-96 pb-16 max-[850px]:pt-72">';
   // pt-[30rem] = 480px desktop, 384px mobile — espaço pro CTA card flutuante
   // não grudar nos links/copyright.
+  // pt-[42rem] = 672px desktop: cobre os 160px do top-[10rem] + altura do card
+  //               (~480px) + buffer pros links não sobrepor. Mobile proporcional.
   const next =
-    '<div class="bg-card rounded-tr-[3rem] rounded-tl-[3rem] pt-[30rem] pb-16 max-[850px]:pt-[24rem] border-t-2 border-accent/40 shadow-[0_-20px_60px_-30px_rgba(230,81,0,0.25)]">';
+    '<div class="bg-card rounded-tr-[3rem] rounded-tl-[3rem] pt-[42rem] pb-16 max-[850px]:pt-[34rem] border-t-2 border-accent/40 shadow-[0_-20px_60px_-30px_rgba(230,81,0,0.25)]">';
   s = s.split(old).join(next);
 }
+
+// ===== 2k) Form CTA — aumenta padding interno (caixa branca fica inset) =====
+s = s.split(
+  'flex items-center w-full max-w-md bg-background rounded-xl p-1.5 shadow-lg max-[850px]:flex-col max-[850px]:p-3'
+).join(
+  'flex items-center w-full max-w-md bg-background rounded-xl p-2.5 shadow-lg max-[850px]:flex-col max-[850px]:p-3'
+);
+
+// ===== 2j) Botão "Quero receber acesso" — alinha com a forma =====
+// rounded-lg (8px) não bate com a forma rounded-xl (12px) + p-1.5 (6px),
+// que pede rounded de ~6px (rounded-md) ou levemente maior pra match visual.
+// rounded-[10px] = curva sutilmente menor que a forma, encaixe visual limpo.
+// px-4 em vez de px-5 + shrink-0 evita o botão "esticar" e empurrar o input.
+s = s.split(
+  'flex items-center justify-center gap-2 px-5 py-2.5 bg-foreground hover:bg-foreground/90 text-background rounded-lg text-sm font-medium transition-colors whitespace-nowrap max-[850px]:w-full max-[850px]:py-3'
+).join(
+  'flex items-center justify-center gap-2 px-4 py-2.5 bg-foreground hover:bg-foreground/90 text-background rounded-[10px] text-sm font-medium transition-colors whitespace-nowrap shrink-0 max-[850px]:w-full max-[850px]:py-3'
+);
+
+// ===== 2i) CTA card (Você já sentiu) — desce pra dentro do painel =====
+// top-0 fazia o card flutuar acima da borda laranja do painel. top-[10rem]
+// põe ele 160px abaixo, dentro do painel, com a borda visível por cima.
+s = s.split('absolute left-1/2 -translate-x-1/2 top-0 w-full max-w-5xl')
+     .join('absolute left-1/2 -translate-x-1/2 top-[10rem] max-[850px]:top-[7rem] w-full max-w-5xl');
 
 // ===== 3) Footer theme-adaptive =====
 const footStart = s.indexOf('<footer');
@@ -295,6 +321,28 @@ const heroBgNew =
 const heroBgSwaps = s.split(heroBgOld).length - 1;
 s = s.split(heroBgOld).join(heroBgNew);
 
+// ===== 6) Footer CTA card — troca BG.jpg prateado por composicao laranja premium =====
+// A "caixa prateada" no rodape (Voce ja sentiu que tem potencial...) usava
+// BG.jpg com filter:hue-rotate(88deg) saturate(0.42) — desbotava qualquer
+// cor pra um cinza-bronze metalico. Substitui o background-image inteiro
+// por gradiente em camadas: base diagonal cream -> laranja Clube -> burnt,
+// spotlight cream no topo, glow Clube profundo no rodape, 2 soft lights
+// laterais. Remove tambem o filter e ajusta opacidade.
+const footerCtaBgOld =
+  'background-image:url(/BG.jpg);background-size:140%;' +
+  'filter:hue-rotate(88deg) saturate(0.42) brightness(1.42) contrast(0.82);' +
+  'opacity:0.95';
+const footerCtaBgNew =
+  'background-image:' +
+  'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(255, 240, 220, 0.65), transparent 65%),' +
+  'radial-gradient(ellipse 90% 65% at 50% 110%, rgba(180, 60, 0, 0.55), transparent 70%),' +
+  'radial-gradient(circle at 18% 30%, rgba(255, 215, 170, 0.40), transparent 42%),' +
+  'radial-gradient(circle at 82% 32%, rgba(255, 195, 145, 0.40), transparent 42%),' +
+  'linear-gradient(135deg, #FFD2A0 0%, #FFA15A 30%, #E65100 70%, #8B2E00 100%);' +
+  'opacity:1';
+const footerCtaBgSwaps = s.split(footerCtaBgOld).length - 1;
+s = s.split(footerCtaBgOld).join(footerCtaBgNew);
+
 // ===== 7) Card InfiZap — remove a borda/glow branco no rodape do card =====
 // O gradient do card (2g) terminava em rgba(255,255,255,0.96) — branco quase
 // opaco que no dark mode aparece como uma faixa clara/borda branca embaixo,
@@ -329,4 +377,5 @@ console.log('arrow boxes bg-accent:', arrowBoxCount);
 console.log('footer neutral-900 antes:', footRefsBefore, '/ depois:', footRefsAfter);
 console.log('color azul→laranja swaps:', colorSwapCount);
 console.log('InfiZap card white edge swaps:', infizapBorderCount);
+console.log('footer CTA bg premium swaps:', footerCtaBgSwaps);
 console.log('hero BG premium swaps:', heroBgSwaps);
