@@ -401,7 +401,7 @@ s = s.split('Discord e WhatsApp').join('Circle e WhatsApp');
     { name: 'Perplexity',  src: 'https://cdn.simpleicons.org/perplexity' },
     { name: 'Vercel',      src: 'https://cdn.simpleicons.org/vercel' },
     { name: 'Supabase',    src: 'https://cdn.simpleicons.org/supabase' },
-    { name: 'Codex',       src: 'https://cdn.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-svg/icons/codex.svg' },
+    { name: 'Codex',       src: '/brand-logos/codex-color.svg' },
   ];
   const renderItem = (t) =>
     '<span aria-label="' + t.name + '" title="' + t.name + '" class="jsx-424d2fc9e9041c90 tech-button">' +
