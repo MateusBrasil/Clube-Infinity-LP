@@ -160,6 +160,77 @@ for (const [from, to] of arrowBoxBefore) {
   }
 }
 
+// ===== 2f) Footer brand mark — triquetra + CLUBE INFINITY =====
+{
+  const old =
+    '<div class="w-8 h-8 rounded-full bg-foreground"></div><span class="text-xl font-semibold text-foreground leading-0">Clube Infinity</span>';
+  const sym =
+    '<svg viewBox="0 0 160 160" class="w-8 h-8 shrink-0 text-foreground" aria-hidden="true">' +
+    '<polygon points="80,14 124.7,111 35.3,111" fill="none" stroke="#E65100" stroke-width="3" stroke-linejoin="round"/>' +
+    '<g transform="translate(80,80)">' +
+    '<ellipse cx="0" cy="-28" rx="17" ry="37" fill="none" stroke="currentColor" stroke-width="3"/>' +
+    '<ellipse cx="0" cy="-28" rx="17" ry="37" fill="none" stroke="currentColor" stroke-width="3" transform="rotate(120)"/>' +
+    '<ellipse cx="0" cy="-28" rx="17" ry="37" fill="none" stroke="currentColor" stroke-width="3" transform="rotate(240)"/>' +
+    '</g>' +
+    '<circle cx="80" cy="80" r="6" fill="#E65100"/>' +
+    '</svg>';
+  const next = sym +
+    '<span data-brand-wordmark class="text-base text-foreground leading-0">CLUBE</span>' +
+    '<span data-brand-wordmark class="text-base text-foreground leading-0" style="margin-left:10px">INFINITY</span>';
+  s = s.split(old).join(next);
+}
+
+// ===== 2g) Bônus card — Codex → InfiZap (CRM + ERP omnichannel) =====
+{
+  const swaps = [
+    [
+      'Todo comprador ganha 1 mês de Codex no ChatGPT Plus, pago por mim.',
+      'Todo comprador ganha 7 dias grátis na InfiZap, a plataforma de atendimento com IA.',
+    ],
+    [
+      'O ChatGPT Plus sozinho custa <span class="font-medium text-foreground">US$20</span>, quase o valor do curso inteiro. Eu pago esse mês pra você porque aposto de verdade no seu aprendizado. Dinheiro real e comprado na sua frente.',
+      'InfiZap é o CRM + ERP omnichannel com agentes de IA pra <span class="font-medium text-foreground">WhatsApp, Instagram e Facebook</span>. Mais vendas, operação organizada e seus números claros. Você entra com o time pronto pra escalar — eu pago a primeira semana.',
+    ],
+    [
+      '<img alt="Codex" loading="lazy" width="52" height="52" decoding="async" class="h-[52px] w-[52px] rounded-[1.1rem]" style="color:transparent" src="https://x0.at/76jH.svg">',
+      '<img src="/brand/infizap.png" alt="InfiZap" loading="lazy" decoding="async" width="52" height="52" class="h-[52px] w-[52px] rounded-[1.1rem] object-cover">',
+    ],
+    ['Codex + ChatGPT Plus', 'InfiZap — 7 dias grátis'],
+    [
+      '1 mês de <span class="text-foreground font-medium">ChatGPT Plus</span>, US$20 pago por mim',
+      'InfiZap completo por <span class="text-foreground font-medium">7 dias</span>, pago por mim',
+    ],
+    [
+      'Acesso ao <span class="text-foreground font-medium">Codex</span> incluso no plano',
+      'Agentes de IA pra <span class="text-foreground font-medium">WhatsApp, Instagram e Facebook</span>',
+    ],
+    [
+      'Garantido para <span class="text-foreground font-medium">todos os compradores</span>',
+      'CRM + ERP unificado, com <span class="text-foreground font-medium">números claros</span>',
+    ],
+    [
+      // Callout: laranja sólido, sem opacidade no texto (sem efeito branco/glow)
+      '<div class="mt-6 rounded-xl border border-accent/20 bg-accent/8 px-4 py-3"><p class="text-xs text-muted-foreground"><span class="font-semibold text-foreground">O Plus custa quase o valor do curso.</span> <!-- -->E eu dou de brinde. Tire suas próprias conclusões.</p></div>',
+      '<div class="mt-6 rounded-xl bg-accent px-4 py-3"><p class="text-xs text-white"><span class="font-semibold">Meta Business Partner certificada.</span> Operação profissional no seu colo desde o dia 1.</p></div>',
+    ],
+  ];
+  for (const [from, to] of swaps) s = s.split(from).join(to);
+}
+
+// ===== 2h) Footer panel — bg-accent (laranja sólido) → bg-card + glow =====
+// O painel inferior dos links era um bloco laranja chapado gigante (pt-96 = 384px).
+// Trocamos por bg-card (theme-adaptive: branco em light, escuro em dark) com
+// borda + glow laranja sutil no topo pra manter brand sem virar muro de cor.
+{
+  const old =
+    '<div class="bg-accent rounded-tr-[3rem] rounded-tl-[3rem] pt-96 pb-16 max-[850px]:pt-72">';
+  // pt-[30rem] = 480px desktop, 384px mobile — espaço pro CTA card flutuante
+  // não grudar nos links/copyright.
+  const next =
+    '<div class="bg-card rounded-tr-[3rem] rounded-tl-[3rem] pt-[30rem] pb-16 max-[850px]:pt-[24rem] border-t-2 border-accent/40 shadow-[0_-20px_60px_-30px_rgba(230,81,0,0.25)]">';
+  s = s.split(old).join(next);
+}
+
 // ===== 3) Footer theme-adaptive =====
 const footStart = s.indexOf('<footer');
 const footEnd = s.indexOf('</footer>', footStart) + '</footer>'.length;
@@ -224,6 +295,32 @@ const heroBgNew =
 const heroBgSwaps = s.split(heroBgOld).length - 1;
 s = s.split(heroBgOld).join(heroBgNew);
 
+// ===== 7) Card InfiZap — remove a borda/glow branco no rodape do card =====
+// O gradient do card (2g) terminava em rgba(255,255,255,0.96) — branco quase
+// opaco que no dark mode aparece como uma faixa clara/borda branca embaixo,
+// chocando com o fundo escuro da pagina. Troca pra rgba(230,81,0,0) (laranja
+// totalmente transparente) pra o card fade naturalmente no fundo.
+// Aplica nos 3 formatos (HTML class, valor CSS, seletor Tailwind escapado).
+const infizapBorderSwaps = [
+  // HTML inline (sem espacos)
+  ['rgba(230,81,0,0.05)_50%,rgba(255,255,255,0.96)_100%',
+   'rgba(230,81,0,0.05)_50%,rgba(230,81,0,0)_100%'],
+  // Valor CSS (com espacos)
+  ['rgba(230, 81, 0, 0.05) 50%, rgba(255, 255, 255, 0.96)',
+   'rgba(230, 81, 0, 0.05) 50%, rgba(230, 81, 0, 0)'],
+  // Seletor Tailwind (2 backslashes literais -> \\\\ no JS source)
+  ['rgba\\\\(230\\\\,81\\\\,0\\\\,0\\\\.05\\\\)_50\\\\%\\\\,rgba\\\\(255\\\\,255\\\\,255\\\\,0\\\\.96\\\\)_100\\\\%',
+   'rgba\\\\(230\\\\,81\\\\,0\\\\,0\\\\.05\\\\)_50\\\\%\\\\,rgba\\\\(230\\\\,81\\\\,0\\\\,0\\\\)_100\\\\%'],
+];
+let infizapBorderCount = 0;
+for (const [from, to] of infizapBorderSwaps) {
+  const n = s.split(from).length - 1;
+  if (n) {
+    s = s.split(from).join(to);
+    infizapBorderCount += n;
+  }
+}
+
 fs.writeFileSync(path, s, 'utf8');
 console.log('nav brand mark swaps:', navSwaps);
 console.log('hero image swaps:', heroSwaps);
@@ -231,4 +328,5 @@ console.log('timeline track bg-accent/30:', timelineTrackBefore);
 console.log('arrow boxes bg-accent:', arrowBoxCount);
 console.log('footer neutral-900 antes:', footRefsBefore, '/ depois:', footRefsAfter);
 console.log('color azul→laranja swaps:', colorSwapCount);
+console.log('InfiZap card white edge swaps:', infizapBorderCount);
 console.log('hero BG premium swaps:', heroBgSwaps);
