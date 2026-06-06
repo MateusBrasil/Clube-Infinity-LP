@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clube Infinity — Landing Page
 
-## Getting Started
+Landing page da comunidade Clube Infinity, inspirada visualmente em auryonacademy.com.
+Construída em **Next.js 15 + TypeScript + Tailwind v4 + Framer Motion**.
 
-First, run the development server:
+---
+
+## Rodando localmente
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre em http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Editando a landing — 3 lugares só
 
-## Learn More
+### 1. Textos (TUDO)
+Arquivo: [`lib/content.ts`](./lib/content.ts)
 
-To learn more about Next.js, take a look at the following resources:
+Todos os textos da página (header, hero, bento, processo, preço, FAQ, footer) estão centralizados aqui. Mude e salva, a página atualiza sozinha.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```ts
+export const hero = {
+  badge: "Inscrições abertas",
+  title: ["Seu título aqui", "destaque colorido"],
+  subtitle: "Seu subtítulo aqui",
+  // ...
+};
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Cores e tema
+Arquivo: [`app/globals.css`](./app/globals.css)
 
-## Deploy on Vercel
+As cores são variáveis CSS. Pra trocar o accent (violeta atual) por verde, por exemplo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```css
+--color-brand:        #4ade80;   /* novo accent */
+--color-brand-strong: #16a34a;
+--color-brand-glow:   rgba(74,222,128,0.18);
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tudo (botões, glows, gradientes) atualiza junto.
+
+### 3. Imagens
+Coloque arquivos em [`public/images/`](./public) e use no JSX:
+
+```tsx
+<img src="/images/sua-foto.png" />
+```
+
+---
+
+## Estrutura
+
+```
+clube-infinity-lp/
+├── app/
+│   ├── globals.css      ← TEMA (cores, fontes)
+│   ├── layout.tsx       ← Meta tags, fontes
+│   └── page.tsx         ← Monta todas as seções na ordem
+├── components/
+│   ├── sections/        ← 10 seções, uma por arquivo
+│   │   ├── Header.tsx
+│   │   ├── Hero.tsx
+│   │   ├── BentoGrid.tsx
+│   │   ├── Community.tsx
+│   │   ├── Process.tsx
+│   │   ├── Bonus.tsx
+│   │   ├── Pricing.tsx
+│   │   ├── FAQ.tsx
+│   │   ├── FinalCTA.tsx
+│   │   └── Footer.tsx
+│   └── ui/              ← componentes reutilizáveis (Button, Container, Badge)
+├── lib/
+│   ├── content.ts       ← COPY (TODOS os textos aqui)
+│   └── utils.ts
+└── public/              ← imagens, favicon, etc.
+```
+
+---
+
+## Deploy no Vercel (grátis)
+
+### Opção A — pelo CLI (1 minuto)
+```bash
+npm i -g vercel
+vercel
+```
+Segue os prompts. Primeiro deploy gera URL `https://clube-infinity-lp-xxxxx.vercel.app`.
+
+### Opção B — pelo painel do Vercel
+1. Cria conta em https://vercel.com (login com GitHub)
+2. Sobe esse projeto pro GitHub: `git init`, `git add .`, `git commit`, `gh repo create`, `git push`
+3. No painel Vercel: "Add New Project" → escolhe o repo → Deploy
+4. Cada `git push` faz redeploy automático
+
+### Domínio próprio
+No painel do projeto Vercel: **Settings → Domains → Add** → digita `clubeinfinity.com.br` → Vercel mostra os DNS pra configurar.
+
+---
+
+## Próximos passos
+
+- [ ] Trocar copy em `lib/content.ts` pelo seu definitivo
+- [ ] Ajustar cores em `app/globals.css` se quiser outra paleta
+- [ ] Adicionar suas imagens em `public/images/`
+- [ ] Plugar Stripe/Hotmart no botão de checkout (`Button` em Pricing/Hero)
+- [ ] Conectar Discord/WhatsApp reais (URLs em `lib/content.ts` → `community`)
+- [ ] Adicionar analytics (Vercel Analytics: `npm i @vercel/analytics`)
+- [ ] Deploy

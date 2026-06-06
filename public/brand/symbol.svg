@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="INFINITY symbol">
+  <polygon points="80,14 124.7,111 35.3,111" fill="none" stroke="#E65100" stroke-width="1.8" stroke-linejoin="round"/>
+  <g transform="translate(80,80)">
+    <ellipse cx="0" cy="-28" rx="17" ry="37" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+    <ellipse cx="0" cy="-28" rx="17" ry="37" fill="none" stroke="#FFFFFF" stroke-width="2" transform="rotate(120)"/>
+    <ellipse cx="0" cy="-28" rx="17" ry="37" fill="none" stroke="#FFFFFF" stroke-width="2" transform="rotate(240)"/>
+  </g>
+  <circle cx="80" cy="80" r="5" fill="#E65100"/>
+</svg>

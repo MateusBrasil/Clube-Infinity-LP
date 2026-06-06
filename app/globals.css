@@ -1,26 +1,113 @@
+/**
+ * STYLES — IDÊNTICOS AO AURYONACADEMY.COM
+ *
+ * auryon-1.css: declarações @font-face (Inter + Fustat) + classes utilitárias de fonte
+ * auryon-2.css: Tailwind compilado completo deles (variáveis, utilitários, animações, custom)
+ *
+ * Pra trocar paleta global, edite as variáveis no topo de auryon-2.css
+ * (procure por --background, --foreground, --brand, --frame, etc.)
+ */
+@import "./auryon-1.css";
+@import "./auryon-2.css";
+
 @import "tailwindcss";
 
+/* Tailwind v4: dark mode estratégia "classe" em vez de prefers-color-scheme.
+   Sem isso, dark:* aplica se o OS está em dark mode — ignorando o toggle do site. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Reset mínimo extra pra garantir altura cheia */
+html, body {
+  min-height: 100%;
+}
+
+/* =========================================================================
+   Clube INFINITY — design system override
+   (vem DEPOIS de auryon-2.css pra ganhar especificidade)
+
+   Paleta oficial (ver Clube Infinity Identidade Visual/logo-spec.md):
+   - Clube orange (accent oficial):  #E65100  ~ oklch(58% 0.21 39)
+   - INFINITY orange (master):       #FF6B00  ~ oklch(70% 0.22 40)
+   - Page dark:                      #0A0A0A  ~ oklch(8% 0 0)
+   - Deep black:                     #0D0D0D  ~ oklch(10% 0 0)
+   - Surface tones:                  #151515 / #1A1A1A / #2A2A2A
+   - White:                          #FFFFFF
+
+   Tipografia: Inter — wordmark 800 (letter-spacing 3px), display 700,
+   subhead 600, body 400/500.
+   ========================================================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light mode — superfícies brancas, foreground escuro, accent laranja */
+  --background:           oklch(98% 0 0);             /* #F5F5F5 */
+  --foreground:           oklch(15% 0 0);             /* #0D0D0D */
+  --card:                 oklch(100% 0 0);
+  --card-foreground:      oklch(15% 0 0);
+  --card-foreground-muted: oklch(45% 0 0);
+  --card-primary:         oklch(58% 0.21 39);         /* Clube orange */
+  --card-secondary:       oklch(95% 0 0);
+  --primary:              oklch(58% 0.21 39);         /* Clube orange (em vez do INFINITY mais quente, pra contraste em fundo claro) */
+  --primary-foreground:   oklch(100% 0 0);
+  --secondary:            oklch(95% 0 0);
+  --secondary-foreground: oklch(15% 0 0);
+  --accent:               oklch(58% 0.21 39);         /* Clube orange */
+  --accent-foreground:    oklch(100% 0 0);
+  --muted:                oklch(95% 0 0);
+  --muted-foreground:     oklch(45% 0 0);
+  --border:               oklch(90% 0 0);
+  --frame:                oklch(100% 0 0);
+  --ring:                 oklch(58% 0.21 39);         /* foco / outline Clube orange */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  /* Dark mode (default) — superfícies #0A0A0A, foreground branco */
+  --background:           oklch(8% 0 0);              /* #0A0A0A */
+  --foreground:           oklch(96% 0 0);
+  --card:                 oklch(10% 0 0);             /* #0D0D0D */
+  --card-foreground:      oklch(96% 0 0);
+  --card-foreground-muted: oklch(70% 0 0);
+  --card-primary:         oklch(58% 0.21 39);         /* Clube orange */
+  --card-secondary:       oklch(15% 0 0);
+  --primary:              oklch(70% 0.22 40);         /* INFINITY orange (mais brilho no escuro) */
+  --primary-foreground:   oklch(100% 0 0);
+  --secondary:            oklch(15% 0 0);
+  --secondary-foreground: oklch(96% 0 0);
+  --accent:               oklch(58% 0.21 39);         /* Clube orange */
+  --accent-foreground:    oklch(100% 0 0);
+  --muted:                oklch(15% 0 0);
+  --muted-foreground:     oklch(70% 0 0);
+  --border:               oklch(20% 0 0);
+  --frame:                oklch(10% 0 0);
+  --ring:                 oklch(70% 0.22 40);         /* foco INFINITY orange (brilho no dark) */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Wordmark typography (qualquer elemento com data-brand-wordmark herda) */
+[data-brand-wordmark] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Intro sutil pra sections quando entram na viewport.
+   Aplicado/removido por LandingInteractivity via IntersectionObserver.
+   Sem o JS rodando (e.g. usuário com motion-reduced), o conteúdo aparece
+   normalmente porque .anim-init só é adicionado client-side. */
+.anim-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.anim-init.anim-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-init {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
