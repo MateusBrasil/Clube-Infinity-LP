@@ -233,12 +233,7 @@ for (const [from, to] of arrowBoxBefore) {
   s = s.split(old).join(next);
 }
 
-// ===== 2k) Form CTA — aumenta padding interno (caixa branca fica inset) =====
-s = s.split(
-  'flex items-center w-full max-w-md bg-background rounded-xl p-1.5 shadow-lg max-[850px]:flex-col max-[850px]:p-3'
-).join(
-  'flex items-center w-full max-w-md bg-background rounded-xl p-2.5 shadow-lg max-[850px]:flex-col max-[850px]:p-3'
-);
+// ===== 2k) (form padding mantido em p-1.5 — botão tem mr-1 em 2j pra inset visual) =====
 
 // ===== 2j) Botão "Quero receber acesso" — alinha com a forma =====
 // rounded-lg (8px) não bate com a forma rounded-xl (12px) + p-1.5 (6px),
@@ -248,7 +243,7 @@ s = s.split(
 s = s.split(
   'flex items-center justify-center gap-2 px-5 py-2.5 bg-foreground hover:bg-foreground/90 text-background rounded-lg text-sm font-medium transition-colors whitespace-nowrap max-[850px]:w-full max-[850px]:py-3'
 ).join(
-  'flex items-center justify-center gap-2 px-4 py-2.5 bg-foreground hover:bg-foreground/90 text-background rounded-[10px] text-sm font-medium transition-colors whitespace-nowrap shrink-0 max-[850px]:w-full max-[850px]:py-3'
+  'flex items-center justify-center gap-2 px-4 py-2.5 mr-1 bg-foreground hover:bg-foreground/90 text-background rounded-[10px] text-sm font-medium transition-colors whitespace-nowrap shrink-0 max-[850px]:w-full max-[850px]:py-3 max-[850px]:mr-0'
 );
 
 // ===== 2i) CTA card (Você já sentiu) — desce pra dentro do painel =====
@@ -343,6 +338,27 @@ const footerCtaBgNew =
 const footerCtaBgSwaps = s.split(footerCtaBgOld).length - 1;
 s = s.split(footerCtaBgOld).join(footerCtaBgNew);
 
+// ===== 6b) Pills da secao InfiZap — contorno laranja pra destacar =====
+// O pill "Bonus para todos" (topo da secao) e o pill "Clube Infinity ·
+// Criador do 1337" (rodape do texto) usavam border-border (cinza sutil),
+// quase invisivel no bg escuro. Troca pra border-accent (laranja Clube
+// solido) pra destacar a secao. No pill 1 troca tambem texto pra
+// text-accent (uppercase laranja sobre bg escuro = look premium).
+let sectionPillsCount = 0;
+const sectionPills = [
+  ['inline-flex items-center rounded-full border border-border bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground',
+   'inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent'],
+  ['mt-7 inline-flex items-center gap-3 rounded-2xl border border-border bg-frame px-5 py-4',
+   'mt-7 inline-flex items-center gap-3 rounded-2xl border border-accent bg-frame px-5 py-4'],
+];
+for (const [from, to] of sectionPills) {
+  const n = s.split(from).length - 1;
+  if (n) {
+    s = s.split(from).join(to);
+    sectionPillsCount += n;
+  }
+}
+
 // ===== 7) Card InfiZap — remove a borda/glow branco no rodape do card =====
 // O gradient do card (2g) terminava em rgba(255,255,255,0.96) — branco quase
 // opaco que no dark mode aparece como uma faixa clara/borda branca embaixo,
@@ -378,4 +394,5 @@ console.log('footer neutral-900 antes:', footRefsBefore, '/ depois:', footRefsAf
 console.log('color azul→laranja swaps:', colorSwapCount);
 console.log('InfiZap card white edge swaps:', infizapBorderCount);
 console.log('footer CTA bg premium swaps:', footerCtaBgSwaps);
+console.log('section pills border-accent swaps:', sectionPillsCount);
 console.log('hero BG premium swaps:', heroBgSwaps);
