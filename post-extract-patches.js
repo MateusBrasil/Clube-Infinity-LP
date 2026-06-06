@@ -384,23 +384,24 @@ s = s.split('Discord e WhatsApp').join('Circle e WhatsApp');
 // e o primeiro </div> seguinte pelo mesmo HTML — convergente.
 {
   const tools = [
-    // SVGs oficiais transparentes:
-    //   - cdn.simpleicons.org: cor da marca, sem fundo
-    //   - svgl.app/library: fallback pra logos nao indexados no Simple Icons
-    // Note: ChatGPT usa svgl porque o slug 'chatgpt' nao existe no
-    // simpleicons (so 'openai' que e a espiral generica). Claude Code usa
-    // o logo Anthropic (slug 'anthropic') pra diferenciar do Claude
-    // standalone. Codex no lugar de Next.js usa o logo OpenAI (espiral).
-    { name: 'Claude',      src: 'https://cdn.simpleicons.org/claude' },
-    { name: 'ChatGPT',     src: 'https://svgl.app/library/chatgpt.svg' },
+    // URLs validadas (HEAD 200) em multiplas fontes — cada brand serve
+    // a SVG transparente. Mistura porque nenhuma fonte unica cobre tudo:
+    //   - cdn.simpleicons.org: tem cursor, n8n, perplexity, vercel, supabase
+    //     mas NAO tem 'chatgpt' nem 'openai' (404)
+    //   - lobehub/lobe-icons via jsdelivr: tem Claude (cor + mono), Codex
+    //     oficial, e diferencia claude-color (Claude) de claude (Claude Code)
+    //   - svgl: cobre Lovable que nao esta em outras fontes
+    //   - Wikipedia commons: unica fonte estavel pra logo oficial do ChatGPT
+    { name: 'Claude',      src: 'https://cdn.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-svg/icons/claude-color.svg' },
+    { name: 'ChatGPT',     src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
     { name: 'Cursor',      src: 'https://cdn.simpleicons.org/cursor' },
     { name: 'n8n',         src: 'https://cdn.simpleicons.org/n8n' },
     { name: 'Lovable',     src: 'https://svgl.app/library/lovable.svg' },
-    { name: 'Claude Code', src: 'https://cdn.simpleicons.org/anthropic' },
+    { name: 'Claude Code', src: 'https://cdn.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-svg/icons/claude.svg' },
     { name: 'Perplexity',  src: 'https://cdn.simpleicons.org/perplexity' },
     { name: 'Vercel',      src: 'https://cdn.simpleicons.org/vercel' },
     { name: 'Supabase',    src: 'https://cdn.simpleicons.org/supabase' },
-    { name: 'Codex',       src: 'https://cdn.simpleicons.org/openai' },
+    { name: 'Codex',       src: 'https://cdn.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-svg/icons/codex.svg' },
   ];
   const renderItem = (t) =>
     '<span aria-label="' + t.name + '" title="' + t.name + '" class="jsx-424d2fc9e9041c90 tech-button">' +
