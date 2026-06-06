@@ -21,12 +21,14 @@ html, body {
   min-height: 100%;
 }
 
-/* Gradient backdrop (radial amber/orange glow) — substitui o fundo cinza chapado.
-   Center = cor do background do tema, edges = laranja Clube. Funciona em
-   light + dark via vars CSS. background-attachment:fixed pra não rolar. */
+/* Backdrop: fundo do tema sólido + glow sutil elíptico na base.
+   O glow é uma elipse pequena 80%×40% centrada na base, com laranja 8% que
+   fade pra transparent — dá calor sem virar muro laranja. Fixed = não rola. */
 body {
   background-color: var(--background);
-  background-image: radial-gradient(125% 125% at 50% 90%, var(--background) 40%, var(--accent) 100%);
+  background-image:
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(230, 81, 0, 0.08), transparent 60%),
+    radial-gradient(ellipse 60% 30% at 50% 0%, rgba(230, 81, 0, 0.04), transparent 70%);
   background-size: 100% 100%;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -90,6 +92,28 @@ body {
   --frame:                oklch(10% 0 0);
   --ring:                 oklch(70% 0.22 40);         /* foco INFINITY orange (brilho no dark) */
 }
+
+/* ============================================================
+   Brand color overrides — força laranja em tudo que era azul
+   ============================================================ */
+.bg-accent { background-color: #E65100 !important; }
+.bg-card-primary { background-color: #E65100 !important; }
+.bg-primary { background-color: #E65100 !important; }
+.text-accent { color: #E65100 !important; }
+.text-primary { color: #E65100 !important; }
+.border-accent { border-color: #E65100 !important; }
+.ring-accent { --tw-ring-color: #E65100 !important; }
+
+/* Variantes com opacidade (Tailwind oklab fallback fica azul-ish) */
+.bg-accent\/10 { background-color: rgba(230, 81, 0, 0.10) !important; }
+.bg-accent\/15 { background-color: rgba(230, 81, 0, 0.15) !important; }
+.bg-accent\/20 { background-color: rgba(230, 81, 0, 0.20) !important; }
+.bg-accent\/30 { background-color: rgba(230, 81, 0, 0.30) !important; }
+.bg-accent\/40 { background-color: rgba(230, 81, 0, 0.40) !important; }
+.bg-accent\/50 { background-color: rgba(230, 81, 0, 0.50) !important; }
+.border-accent\/20 { border-color: rgba(230, 81, 0, 0.20) !important; }
+.border-accent\/30 { border-color: rgba(230, 81, 0, 0.30) !important; }
+.border-accent\/35 { border-color: rgba(230, 81, 0, 0.35) !important; }
 
 /* Wordmark typography (qualquer elemento com data-brand-wordmark herda) */
 [data-brand-wordmark] {

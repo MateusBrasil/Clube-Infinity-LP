@@ -46,6 +46,120 @@ s = s.replace(
   '$1/capa-modulo.png$2'
 );
 
+// ===== 2b) Timeline track preto → laranja (#como-funciona) =====
+// A linha vertical de progresso usa bg-black/10 no Auryon. Troca pra bg-accent/30
+// pra a track ficar laranja sutil (e o fill bg-accent já é laranja sólido).
+const timelineTrackBefore = (s.match(/h-\[calc\(100%-6rem\)\] w-0\.5 -translate-x-1\/2 bg-black\/10/g) || []).length;
+s = s.replace(
+  /h-\[calc\(100%-6rem\)\] w-0\.5 -translate-x-1\/2 bg-black\/10/g,
+  'h-[calc(100%-6rem)] w-0.5 -translate-x-1/2 bg-accent/30'
+);
+
+// ===== 2c) Caixa da setinha (Quero começar / Quero destravar) bg-accent =====
+// O Auryon não dava bg-accent na caixa da seta (ficava transparente, mostrava
+// o bg-accent atrás). Mas o backdrop só cobre 100%-1.5rem, então sobra um
+// "vazio" no rightmost 1.5rem onde a caixa fica sem bg. Adicionamos bg-accent
+// na caixa pra ser sempre laranja sólido.
+const arrowBoxBefore = [
+  ['relative -left-px z-10 w-10 h-10 rounded-xl flex items-center justify-center text-black',
+   'relative -left-px z-10 w-10 h-10 rounded-xl flex items-center justify-center text-black bg-accent'],
+  ['relative -left-px z-10 flex h-11 w-11 items-center justify-center rounded-xl text-black',
+   'relative -left-px z-10 flex h-11 w-11 items-center justify-center rounded-xl text-black bg-accent'],
+];
+let arrowBoxCount = 0;
+for (const [from, to] of arrowBoxBefore) {
+  const n = s.split(from).length - 1;
+  s = s.split(from).join(to);
+  arrowBoxCount += n;
+}
+
+// ===== 2d) Pricing card — €97 / 3x €32,33, link Stripe, 7 benefícios =====
+{
+  const checkSvg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" ' +
+    'fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" ' +
+    'stroke-linejoin="round" class="lucide lucide-check h-4 w-4 shrink-0 text-accent">' +
+    '<path d="M20 6 9 17l-5-5"></path></svg>';
+  const benefits = [
+    'Acesso à Plataforma Infinity',
+    'Comunidade Exclusiva de Founders',
+    'Lives Semanais com Especialistas',
+    'Conteúdos Novos Toda Semana',
+    'Materiais e Templates Exclusivos',
+    'Networking com Empreendedores',
+    'Suporte Direto da Comunidade',
+  ];
+  const items = benefits.map(b =>
+    '<li class="flex items-center gap-3">' + checkSvg +
+    '<span class="text-sm text-foreground">' + b + '</span></li>'
+  ).join('');
+
+  // Preço
+  s = s.replace(/R\$ <!-- -->197/g, '€97,00');
+  s = s.replace(/12x de R\$ <!-- -->19,70/g, '3x €32,33');
+  // CTA Stripe
+  s = s.split(
+    'https://pay.cakto.com.br/3bhqma6_888049?utm_source=organic&amp;utm_campaign=&amp;utm_medium=&amp;utm_content=&amp;utm_term='
+  ).join('https://buy.stripe.com/5kQeVcfTXeFeen5cny9R60r');
+  // Lista de benefícios
+  const ulStart = 'Você recebe:</p><ul class="mt-4 space-y-3">';
+  const ulEnd = '</ul>';
+  const start = s.indexOf(ulStart);
+  if (start >= 0) {
+    const afterStart = start + ulStart.length;
+    const end = s.indexOf(ulEnd, afterStart);
+    if (end >= 0) {
+      s = s.slice(0, afterStart) + items + s.slice(end);
+    }
+  }
+}
+
+// ===== 2e-pre) Discord card → imagem Circle custom =====
+// Substitui o card Discord (Building The Next Big Thing) pela imagem
+// oficial do grupo Circle do Clube Infinity.
+{
+  const startTag =
+    '<div style="opacity: 1; transform: none;"><div class="rounded-2xl overflow-hidden bg-[#36393f]';
+  const start = s.indexOf(startTag);
+  if (start >= 0) {
+    const btn = s.indexOf('Aceitar convite', start);
+    if (btn >= 0) {
+      const close = s.indexOf('</div></div></div>', btn) + 18;
+      const newCard =
+        '<div style="opacity: 1; transform: none;">' +
+        '<a href="https://infinitybrclubeinfinity.circle.so/c/comunidade-infinity/" target="_blank" rel="noreferrer" ' +
+        'class="block h-full overflow-hidden rounded-2xl shadow-xl shadow-black/30 hover:scale-[1.02] transition-transform">' +
+        '<img src="/grupo-circle-comunidade.png" alt="Comunidade Circle Clube Infinity" ' +
+        'class="w-full h-full object-cover" loading="lazy" decoding="async">' +
+        '</a></div>';
+      s = s.slice(0, start) + newCard + s.slice(close);
+    }
+  }
+}
+
+// ===== 2e) WhatsApp card → imagem custom =====
+// Substitui o card WhatsApp inteiro do template Auryon (Building The Next Big
+// Thing, 248 participantes) pela imagem do Clube Infinity em public/.
+{
+  const startTag =
+    '<div style="opacity: 1; transform: none;"><div class="overflow-hidden rounded-2xl border border-[#d9e0e7] bg-[#f0f2f5]';
+  const start = s.indexOf(startTag);
+  if (start >= 0) {
+    const btn = s.indexOf('Entrar na conversa</button>', start);
+    if (btn >= 0) {
+      const close = s.indexOf('</div></div></div>', btn) + 18;
+      const newCard =
+        '<div style="opacity: 1; transform: none;">' +
+        '<a href="https://chat.whatsapp.com/" target="_blank" rel="noreferrer" ' +
+        'class="block h-full overflow-hidden rounded-2xl shadow-xl shadow-black/30 hover:scale-[1.02] transition-transform">' +
+        '<img src="/grupo-wpp-comunidade.png" alt="Grupo WhatsApp Clube Infinity" ' +
+        'class="w-full h-full object-cover" loading="lazy" decoding="async">' +
+        '</a></div>';
+      s = s.slice(0, start) + newCard + s.slice(close);
+    }
+  }
+}
+
 // ===== 3) Footer theme-adaptive =====
 const footStart = s.indexOf('<footer');
 const footEnd = s.indexOf('</footer>', footStart) + '</footer>'.length;
@@ -113,6 +227,8 @@ s = s.split(heroBgOld).join(heroBgNew);
 fs.writeFileSync(path, s, 'utf8');
 console.log('nav brand mark swaps:', navSwaps);
 console.log('hero image swaps:', heroSwaps);
+console.log('timeline track bg-accent/30:', timelineTrackBefore);
+console.log('arrow boxes bg-accent:', arrowBoxCount);
 console.log('footer neutral-900 antes:', footRefsBefore, '/ depois:', footRefsAfter);
 console.log('color azul→laranja swaps:', colorSwapCount);
 console.log('hero BG premium swaps:', heroBgSwaps);
