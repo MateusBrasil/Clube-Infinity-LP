@@ -363,6 +363,12 @@ for (const [from, to] of sectionPills) {
   }
 }
 
+// ===== 6b-2) Pill InfiZap — troca "Criador do 1337" por copy melhor =====
+// "Criador do 1337" e jargao que so quem conhece o universo hacker reconhece
+// — mas a secao InfiZap fala sobre "eu pago a primeira semana", entao a
+// assinatura ali devia reforcar essa garantia, nao referenciar outro projeto.
+s = s.split('>Criador do 1337<').join('>Garantia direta<');
+
 // ===== 6c) Marquees de ferramentas — 10 ferramentas curadas Clube Infinity =====
 // As 3 marquees (#metodo, secao "Ferramentas necessarias") vinham do template
 // Auryon cheias de logos genericos (Antigravity, Stripe, Sentry, Redis...).
@@ -372,16 +378,19 @@ for (const [from, to] of sectionPills) {
 // e o primeiro </div> seguinte pelo mesmo HTML — convergente.
 {
   const tools = [
-    { name: 'Claude',     src: '/brand-logos/claude-official.ico' },
-    { name: 'ChatGPT',    src: '/brand-logos/openai-blossom-official.svg' },
-    { name: 'Cursor',     src: 'https://avatars.githubusercontent.com/u/126759922?s=200' },
-    { name: 'n8n',        src: 'https://avatars.githubusercontent.com/u/45487711?s=200' },
-    { name: 'Lovable',    src: 'https://avatars.githubusercontent.com/u/166900226?s=200' },
-    { name: 'Bolt',       src: 'https://avatars.githubusercontent.com/u/28635252?s=200' },
-    { name: 'Perplexity', src: 'https://avatars.githubusercontent.com/u/107916885?s=200' },
-    { name: 'Vercel',     src: '/brand-logos/vercel-official.png' },
-    { name: 'Supabase',   src: '/brand-logos/supabase-official.png' },
-    { name: 'Next.js',    src: '/brand-logos/nextjs-official.ico' },
+    // Todos via cdn.simpleicons.org (SVGs oficiais com fundo transparente,
+    // cor da marca). Bolt usa o slug stackblitz porque foi criado pela
+    // StackBlitz. Lovable nao tem icone no Simple Icons — usa svgl mirror.
+    { name: 'Claude',     src: 'https://cdn.simpleicons.org/claude' },
+    { name: 'ChatGPT',    src: 'https://cdn.simpleicons.org/chatgpt' },
+    { name: 'Cursor',     src: 'https://cdn.simpleicons.org/cursor' },
+    { name: 'n8n',        src: 'https://cdn.simpleicons.org/n8n' },
+    { name: 'Lovable',    src: 'https://svgl.app/library/lovable.svg' },
+    { name: 'Bolt',       src: 'https://cdn.simpleicons.org/stackblitz' },
+    { name: 'Perplexity', src: 'https://cdn.simpleicons.org/perplexity' },
+    { name: 'Vercel',     src: 'https://cdn.simpleicons.org/vercel' },
+    { name: 'Supabase',   src: 'https://cdn.simpleicons.org/supabase' },
+    { name: 'Next.js',    src: 'https://cdn.simpleicons.org/nextdotjs' },
   ];
   const renderItem = (t) =>
     '<span aria-label="' + t.name + '" title="' + t.name + '" class="jsx-424d2fc9e9041c90 tech-button">' +
