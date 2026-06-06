@@ -397,7 +397,7 @@ s = s.split('Discord e WhatsApp').join('Circle e WhatsApp');
     { name: 'Cursor',      src: 'https://cdn.simpleicons.org/cursor' },
     { name: 'n8n',         src: 'https://cdn.simpleicons.org/n8n' },
     { name: 'Lovable',     src: 'https://svgl.app/library/lovable.svg' },
-    { name: 'Claude Code', src: 'https://cdn.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-svg/icons/claude.svg' },
+    { name: 'Claude Code', src: '/brand-logos/claudecode-color.svg' },
     { name: 'Perplexity',  src: 'https://cdn.simpleicons.org/perplexity' },
     { name: 'Vercel',      src: 'https://cdn.simpleicons.org/vercel' },
     { name: 'Supabase',    src: 'https://cdn.simpleicons.org/supabase' },
