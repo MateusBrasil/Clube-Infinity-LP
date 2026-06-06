@@ -369,6 +369,12 @@ for (const [from, to] of sectionPills) {
 // assinatura ali devia reforcar essa garantia, nao referenciar outro projeto.
 s = s.split('>Criador do 1337<').join('>Garantia direta<');
 
+// ===== 6b-3) Secao Comunidade — Discord -> Circle =====
+// Ja substituimos o card Discord pelo card Circle (patch 2e-pre), mas o
+// texto descritivo da secao continuava dizendo "Discord e WhatsApp".
+// Atualiza pra refletir o que a comunidade realmente usa.
+s = s.split('Discord e WhatsApp').join('Circle e WhatsApp');
+
 // ===== 6c) Marquees de ferramentas — 10 ferramentas curadas Clube Infinity =====
 // As 3 marquees (#metodo, secao "Ferramentas necessarias") vinham do template
 // Auryon cheias de logos genericos (Antigravity, Stripe, Sentry, Redis...).
@@ -378,19 +384,23 @@ s = s.split('>Criador do 1337<').join('>Garantia direta<');
 // e o primeiro </div> seguinte pelo mesmo HTML — convergente.
 {
   const tools = [
-    // Todos via cdn.simpleicons.org (SVGs oficiais com fundo transparente,
-    // cor da marca). Bolt usa o slug stackblitz porque foi criado pela
-    // StackBlitz. Lovable nao tem icone no Simple Icons — usa svgl mirror.
-    { name: 'Claude',     src: 'https://cdn.simpleicons.org/claude' },
-    { name: 'ChatGPT',    src: 'https://cdn.simpleicons.org/chatgpt' },
-    { name: 'Cursor',     src: 'https://cdn.simpleicons.org/cursor' },
-    { name: 'n8n',        src: 'https://cdn.simpleicons.org/n8n' },
-    { name: 'Lovable',    src: 'https://svgl.app/library/lovable.svg' },
-    { name: 'Bolt',       src: 'https://cdn.simpleicons.org/stackblitz' },
-    { name: 'Perplexity', src: 'https://cdn.simpleicons.org/perplexity' },
-    { name: 'Vercel',     src: 'https://cdn.simpleicons.org/vercel' },
-    { name: 'Supabase',   src: 'https://cdn.simpleicons.org/supabase' },
-    { name: 'Next.js',    src: 'https://cdn.simpleicons.org/nextdotjs' },
+    // SVGs oficiais transparentes:
+    //   - cdn.simpleicons.org: cor da marca, sem fundo
+    //   - svgl.app/library: fallback pra logos nao indexados no Simple Icons
+    // Note: ChatGPT usa svgl porque o slug 'chatgpt' nao existe no
+    // simpleicons (so 'openai' que e a espiral generica). Claude Code usa
+    // o logo Anthropic (slug 'anthropic') pra diferenciar do Claude
+    // standalone. Codex no lugar de Next.js usa o logo OpenAI (espiral).
+    { name: 'Claude',      src: 'https://cdn.simpleicons.org/claude' },
+    { name: 'ChatGPT',     src: 'https://svgl.app/library/chatgpt.svg' },
+    { name: 'Cursor',      src: 'https://cdn.simpleicons.org/cursor' },
+    { name: 'n8n',         src: 'https://cdn.simpleicons.org/n8n' },
+    { name: 'Lovable',     src: 'https://svgl.app/library/lovable.svg' },
+    { name: 'Claude Code', src: 'https://cdn.simpleicons.org/anthropic' },
+    { name: 'Perplexity',  src: 'https://cdn.simpleicons.org/perplexity' },
+    { name: 'Vercel',      src: 'https://cdn.simpleicons.org/vercel' },
+    { name: 'Supabase',    src: 'https://cdn.simpleicons.org/supabase' },
+    { name: 'Codex',       src: 'https://cdn.simpleicons.org/openai' },
   ];
   const renderItem = (t) =>
     '<span aria-label="' + t.name + '" title="' + t.name + '" class="jsx-424d2fc9e9041c90 tech-button">' +
