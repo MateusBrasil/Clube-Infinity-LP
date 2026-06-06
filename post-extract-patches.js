@@ -95,12 +95,16 @@ for (const [from, to] of arrowBoxBefore) {
   ).join('');
 
   // Preço
-  s = s.replace(/R\$ <!-- -->197/g, '€97,00');
-  s = s.replace(/12x de R\$ <!-- -->19,70/g, '3x €32,33');
+  s = s.replace(/R\$ <!-- -->197/g, '€297,00');
+  s = s.replace(/€97,00/g, '€297,00');
+  s = s.replace(/12x de R\$ <!-- -->19,70/g, '3x €99,00');
+  s = s.replace(/3x €32,33/g, '3x €99,00');
   // CTA Stripe
+  const stripeUrlNew = 'https://buy.stripe.com/7sY8wOcHL68I7YH1IU9R60v';
   s = s.split(
     'https://pay.cakto.com.br/3bhqma6_888049?utm_source=organic&amp;utm_campaign=&amp;utm_medium=&amp;utm_content=&amp;utm_term='
-  ).join('https://buy.stripe.com/5kQeVcfTXeFeen5cny9R60r');
+  ).join(stripeUrlNew);
+  s = s.split('https://buy.stripe.com/5kQeVcfTXeFeen5cny9R60r').join(stripeUrlNew);
   // Lista de benefícios
   const ulStart = 'Você recebe:</p><ul class="mt-4 space-y-3">';
   const ulEnd = '</ul>';
