@@ -21,6 +21,17 @@ html, body {
   min-height: 100%;
 }
 
+/* Gradient backdrop (radial amber/orange glow) — substitui o fundo cinza chapado.
+   Center = cor do background do tema, edges = laranja Clube. Funciona em
+   light + dark via vars CSS. background-attachment:fixed pra não rolar. */
+body {
+  background-color: var(--background);
+  background-image: radial-gradient(125% 125% at 50% 90%, var(--background) 40%, var(--accent) 100%);
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
 /* =========================================================================
    Clube INFINITY — design system override
    (vem DEPOIS de auryon-2.css pra ganhar especificidade)
