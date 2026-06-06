@@ -363,6 +363,56 @@ for (const [from, to] of sectionPills) {
   }
 }
 
+// ===== 6c) Marquees de ferramentas — 10 ferramentas curadas Clube Infinity =====
+// As 3 marquees (#metodo, secao "Ferramentas necessarias") vinham do template
+// Auryon cheias de logos genericos (Antigravity, Stripe, Sentry, Redis...).
+// Substituimos pelo set curado que e ensinado no Clube Infinity: AI assistants,
+// AI coding/app builders, automacao, deploy e framework.
+// Idempotente: cada execucao substitui o conteudo entre <div class="...marquee-N">
+// e o primeiro </div> seguinte pelo mesmo HTML — convergente.
+{
+  const tools = [
+    { name: 'Claude',     src: '/brand-logos/claude-official.ico' },
+    { name: 'ChatGPT',    src: '/brand-logos/openai-blossom-official.svg' },
+    { name: 'Cursor',     src: 'https://avatars.githubusercontent.com/u/126759922?s=200' },
+    { name: 'n8n',        src: 'https://avatars.githubusercontent.com/u/45487711?s=200' },
+    { name: 'Lovable',    src: 'https://avatars.githubusercontent.com/u/166900226?s=200' },
+    { name: 'Bolt',       src: 'https://avatars.githubusercontent.com/u/28635252?s=200' },
+    { name: 'Perplexity', src: 'https://avatars.githubusercontent.com/u/107916885?s=200' },
+    { name: 'Vercel',     src: '/brand-logos/vercel-official.png' },
+    { name: 'Supabase',   src: '/brand-logos/supabase-official.png' },
+    { name: 'Next.js',    src: '/brand-logos/nextjs-official.ico' },
+  ];
+  const renderItem = (t) =>
+    '<span aria-label="' + t.name + '" title="' + t.name + '" class="jsx-424d2fc9e9041c90 tech-button">' +
+    '<span class="jsx-424d2fc9e9041c90 tech-logo">' +
+    '<img src="' + t.src + '" alt="' + t.name + '" draggable="false" class="jsx-424d2fc9e9041c90">' +
+    '</span></span>';
+  const rotate = (arr, n) => arr.slice(n).concat(arr.slice(0, n));
+  // Cada marquee comeca em uma rotacao diferente pra nao ficar 3 marquees
+  // alinhadas exibindo o mesmo logo na mesma coluna em um dado instante.
+  const orders = [tools, rotate(tools, 3), rotate(tools, 7)];
+  let marqueeSwaps = 0;
+  for (let i = 0; i < 3; i++) {
+    const marqueeClass = 'tech-basic-marquee tech-basic-marquee-' + (i + 1);
+    const openTagFragment = 'class="jsx-424d2fc9e9041c90 ' + marqueeClass + '"';
+    // Comeca a busca depois de 1.000.000 chars (depois das regras CSS pre-compiladas)
+    const openIdx = s.indexOf(openTagFragment, 1000000);
+    if (openIdx >= 0) {
+      const tagEnd = s.indexOf('>', openIdx) + 1;
+      const closeIdx = s.indexOf('</div>', tagEnd);
+      if (closeIdx >= 0 && closeIdx > tagEnd) {
+        // 3 cópias pro loop suave (igual ao template original que duplicava 3x)
+        const items = orders[i].map(renderItem).join('');
+        const newContent = items + items + items;
+        s = s.slice(0, tagEnd) + newContent + s.slice(closeIdx);
+        marqueeSwaps++;
+      }
+    }
+  }
+  console.log('tools marquees substituidas:', marqueeSwaps);
+}
+
 // ===== 7) Card InfiZap — remove a borda/glow branco no rodape do card =====
 // O gradient do card (2g) terminava em rgba(255,255,255,0.96) — branco quase
 // opaco que no dark mode aparece como uma faixa clara/borda branca embaixo,
