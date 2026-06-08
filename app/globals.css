@@ -146,3 +146,58 @@ body {
     transition: none;
   }
 }
+
+/* =========================================================================
+   Premium animations para dobras Copy v3 (upgrade pós-feedback "cara de IA")
+   ========================================================================= */
+
+/* Rise: entrada vertical com curva premium, usada via inline animation
+   com animation-delay escalonado pra cascade effect nos cards. */
+@keyframes clube-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Shimmer: gradient sliding pra badges LIVE/AO VIVO. Aplicado via
+   background-image: linear-gradient + animação no background-position. */
+@keyframes clube-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Glow pulse: halo laranja respirando devagar. Usar em wrappers de cards
+   premium pra dar profundidade orgânica em loop. */
+@keyframes clube-glow-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.65; }
+}
+
+/* Counter animado: anima --counter-num de 0 ao valor final. Display via
+   counter-reset + counter() em ::after. Sem JS, dispara no page-load.
+   Browsers sem @property (Firefox <128): mostra valor final estatico. */
+@property --counter-num {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+.clube-counter {
+  counter-reset: clubenum var(--counter-num);
+  animation: clube-count-up 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+.clube-counter::after { content: counter(clubenum); }
+@keyframes clube-count-up {
+  from { --counter-num: 0; }
+  to   { --counter-num: 5179; }
+}
+
+/* Slide-in pros checkmarks da tabela value-stack — staggered via inline
+   animation-delay. */
+@keyframes clube-slide-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clube-counter { animation: none; }
+  .clube-counter::after { content: '5179'; }
+}
