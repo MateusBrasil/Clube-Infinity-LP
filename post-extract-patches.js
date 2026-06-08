@@ -459,6 +459,112 @@ for (const [from, to] of infizapBorderSwaps) {
   }
 }
 
+// ===== 8) Nova Copy Clube Infinity v3.0 (Esquadrão Finch + Hormozi) =====
+// Substitui a copy Auryon original pela copy oficial v3 (Nova Copy Clube
+// Infinity - Pagina de Vendas.md). So toca em textos dentro da estrutura
+// HTML existente — secoes novas (Autoridade Fred, Pra Quem É, Encontros
+// ao Vivo, Garantia, tabela de ancoragem do pricing) precisam de HTML
+// novo e nao foram aplicadas aqui.
+let copyV3Count = 0;
+const copyV3 = [
+  // --- Hero pill (eyebrow) ---
+  ['>Inscrições abertas<', '>Inteligência artificial na prática<'],
+  // --- Hero H1 (renderizada em 2 spans de bloco) ---
+  ['A habilidade mais lucrativa da próxima década não será',
+   'Pare de alugar software caro.'],
+  ['programar. Será construir.',
+   'Aprenda a construir o seu com IA, sem virar técnico.'],
+  // --- Hero subhead ---
+  ['Uma nova geração de construtores está surgindo. Pessoas que transformam ideias em produtos na mesma velocidade em que pensam, utilizando IA.',
+   'O Clube Infinity é a comunidade onde empresário aprende a usar IA pra resolver coisa de verdade do dia a dia: criar o próprio CRM, automatizar o WhatsApp, montar o site do negócio, gerar post pras redes e tirar a tarefa repetitiva das costas. Em linguagem que você entende, com um foco só: transformar IA em dinheiro no seu bolso.'],
+  // --- Hero CTA ---
+  ['>Quero destravar agora<', '>Quero entrar no Clube Infinity<'],
+
+  // --- Metodo cards (4 cards) ---
+  ['Ferramentas necessárias, sem te afogar em inutilidade.',
+   'Ferramentas certas, não coleção de nome.'],
+  ['As tecnologias certas, no contexto certo, para voce aprender com repertorio real em vez de colecionar nome de ferramenta.',
+   'Você aprende a usar IA pra puxar 3 alavancas: economizar, automatizar e vender. Sem novidade chique que não vira resultado.'],
+  ['Um preco acessivel que faz parecer mentira.',
+   'Pare de alugar software caro. Construa o seu.'],
+  ['>Comunidade que<', '>Empresário<'],
+  ['>constrói junto<', '>construindo junto<'],
+  ['Troca real, feedback honesto e menos ilusão',
+   'Empresário de verdade, projeto rolando, troca direta'],
+  ['Feito para você vender',
+   'Feito para virar caixa'],
+  ['Você constrói ativos que geram atenção, autoridade e oportunidade de caixa.',
+   'Você cria ativos que geram atenção, autoridade e caixa. IA virando faturamento, não hobby.'],
+
+  // --- Como funciona (3 passos) ---
+  // Passos atuais: "1. Escolhe seu ponto de partida ... 2. ... 3. ..."
+  // Já estão razoavelmente próximos da nova copy; ajuste fino:
+  ['Você escolhe seu ponto de partida.',
+   'Você escolhe seu ponto de partida.'],
+  ['Você aplica com a comunidade te destravando.',
+   'Você aplica com a comunidade te destravando.'],
+  ['Você escala.', 'Você escala.'],
+
+  // --- Comunidade ---
+  // Já temos "Um lugar para trocar networking em tempo real." — manter.
+  // "Discord e WhatsApp..." → "Circle e WhatsApp..." (já feito em 6b-3)
+
+  // --- Pricing ---
+  // H2 "O melhor momento para começar era ontem. O segundo melhor é agora."
+  // já bate com a nova copy. Manter.
+  // CTA: "Quero esse acesso" → "Quero entrar no Clube Infinity"
+  ['>Quero esse acesso<', '>Quero entrar no Clube Infinity<'],
+  // Lista de benefícios já foi reescrita pelo patch 2d.
+
+  // --- FAQ ---
+  ['O que você precisa saber antes de entrar',
+   'O que você precisa saber antes de entrar'],
+  ['Se ainda existir dúvida, é porque você está perto da decisão. Resolve isso agora.',
+   'Se ainda tem dúvida, é porque você está perto da decisão. Vamos lá.'],
+  // Q1 + A1
+  ['Isso serve para quem ainda trava com código?',
+   'Eu não sei nada de IA. Serve pra mim?'],
+  ['Serve, desde que você esteja disposto a construir de verdade. A proposta aqui não é transformar você em decorador de sintaxe. É ensinar você a usar IA com lógica, critério e direção para criar entregas reais.',
+   'Serve, e foi feito pensando em você. Tem trilha que começa do zero, em linguagem de empresário, sem termo técnico. Você não precisa virar programador pra começar.'],
+  // Q2-Q5 (sem resposta no HTML, só pergunta)
+  ['Eu preciso já ter experiência com IA?',
+   'Eu já sou avançado. Não vai ser raso?'],
+  ['O que eu vou conseguir construir com isso?',
+   'Preciso saber programar?'],
+  ['Isso é só mais conteúdo gravado?',
+   'E se eu não puder assistir quarta às 17h?'],
+  ['E se eu quiser ajuda no caminho?',
+   'Quanto custa e tem mensalidade escondida?'],
+
+  // --- Footer CTA ---
+  ['Você já sentiu que tem potencial. Agora falta entrar e construir com método.',
+   'Você já sentiu que tem potencial. Agora falta entrar e usar IA pra botar dinheiro no bolso.'],
+  ['>Quero receber acesso<', '>Quero entrar no Clube Infinity<'],
+];
+for (const [from, to] of copyV3) {
+  if (from === to) continue;
+  const n = s.split(from).length - 1;
+  if (n) {
+    s = s.split(from).join(to);
+    copyV3Count += n;
+  }
+}
+
+// --- Blur paragraph (#metodo "Se você já cansou...") ---
+// Estrutura: <p class="text-3xl ..."><span class="mr-2 inline-block lg:mr-3"
+//   style="opacity:0.15;filter:blur(8px);transition:opacity 75ms,filter 75ms;"
+// >palavra</span><span...>palavra</span>...</p>
+// Reconstroi com nova copy. Idempotente: o regex casa o p inteiro, conteudo
+// trocado por novos spans sempre que executar — converge.
+const blurPattern = /<p class="text-3xl font-medium text-left leading-snug tracking-tight text-foreground sm:text-4xl lg:text-5xl lg:leading-snug">[\s\S]*?<\/p>/;
+const blurNewText = 'Tem muita gente fazendo coisa bonita com IA. Pouca gente botando dinheiro no bolso. Aqui no Clube Infinity é o contrário: a gente fala de resultado, como você usa IA pra vender mais, gastar menos com ferramenta, ganhar tempo e até criar produto novo.';
+const blurSpans = blurNewText.split(' ').map(w =>
+  '<span class="mr-2 inline-block lg:mr-3" style="opacity: 0.15; filter: blur(8px); transition: opacity 75ms, filter 75ms;">' + w + '</span>'
+).join('');
+const blurReplacement = '<p class="text-3xl font-medium text-left leading-snug tracking-tight text-foreground sm:text-4xl lg:text-5xl lg:leading-snug">' + blurSpans + '</p>';
+const blurSwap = blurPattern.test(s) ? 1 : 0;
+s = s.replace(blurPattern, blurReplacement);
+
 fs.writeFileSync(path, s, 'utf8');
 console.log('nav brand mark swaps:', navSwaps);
 console.log('hero image swaps:', heroSwaps);
@@ -467,6 +573,7 @@ console.log('arrow boxes bg-accent:', arrowBoxCount);
 console.log('footer neutral-900 antes:', footRefsBefore, '/ depois:', footRefsAfter);
 console.log('color azul→laranja swaps:', colorSwapCount);
 console.log('InfiZap card white edge swaps:', infizapBorderCount);
+console.log('copy v3 swaps:', copyV3Count, '/ blur paragraph rebuilt:', blurSwap);
 console.log('footer CTA bg premium swaps:', footerCtaBgSwaps);
 console.log('section pills border-accent swaps:', sectionPillsCount);
 console.log('hero BG premium swaps:', heroBgSwaps);
