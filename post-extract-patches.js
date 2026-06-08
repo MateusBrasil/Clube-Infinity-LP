@@ -565,6 +565,256 @@ const blurReplacement = '<p class="text-3xl font-medium text-left leading-snug t
 const blurSwap = blurPattern.test(s) ? 1 : 0;
 s = s.replace(blurPattern, blurReplacement);
 
+// ===== 9) Novas dobras Copy v3 (Fred / Pra Quem É / Lives / Bônus / Prova / Ancoragem / Garantia) =====
+// Cada dobra injeta HTML usando o padrao visual ja validado (section
+// boilerplate + eyebrow pill border-accent + h2 + cards com gradient laranja).
+// Idempotente via marcador data-copy-v3 — re-execucoes nao duplicam.
+const newSections = {};
+
+// --- helper: injeta HTML antes do anchor, so se ainda nao existe ---
+function injectBefore(anchor, html, key) {
+  if (s.indexOf('data-copy-v3="' + key + '"') >= 0) {
+    newSections[key] = 'skip (já existe)';
+    return;
+  }
+  const i = s.indexOf(anchor);
+  if (i < 0) {
+    newSections[key] = 'NO ANCHOR';
+    return;
+  }
+  s = s.slice(0, i) + html + s.slice(i);
+  newSections[key] = 'OK';
+}
+
+// --- 9.1) Autoridade · Quem é o Fred (antes de #metodo) ---
+{
+  const html =
+    '<section data-copy-v3="autoridade-fred" class="w-full bg-background px-6 py-20 sm:py-28">' +
+      '<div class="mx-auto max-w-6xl">' +
+        '<div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16 lg:items-center">' +
+          '<div style="opacity: 1; transform: none;">' +
+            '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Quem está do outro lado</div>' +
+            '<h2 class="mt-5 text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-[3.25rem]">Quem te guia já fez o caminho que você quer fazer.</h2>' +
+            '<p class="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">Eu sou o Fred Martins. Há 8+ anos eu ajudo empresário a usar tecnologia pra vender mais e trabalhar menos. Já passei por construção de negócio, agência, infoprodutos e operação com IA. Eu não sou programador de carteirinha, e é exatamente por isso que eu sei traduzir IA pra linguagem de quem toca um negócio de verdade.</p>' +
+            '<p class="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">O Clube Infinity é onde eu coloco tudo isso num lugar só, e onde toda quarta eu apareço ao vivo pra olhar o que você está construindo.</p>' +
+          '</div>' +
+          '<div class="relative overflow-hidden rounded-[2rem] border border-accent/35 bg-[linear-gradient(180deg,rgba(230,81,0,0.14),rgba(230,81,0,0.05)_50%,rgba(230,81,0,0)_100%)] p-7 sm:p-8" style="opacity: 1; transform: none;">' +
+            '<p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Marcos de autoridade</p>' +
+            '<div class="mt-6 space-y-4">' +
+              '<div class="flex items-start gap-3"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/15 text-xs font-semibold text-accent">01</span><p class="text-sm text-foreground"><span class="font-medium text-foreground">5.000+ empresários</span> formados no método</p></div>' +
+              '<div class="flex items-start gap-3"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/15 text-xs font-semibold text-accent">02</span><p class="text-sm text-foreground"><span class="font-medium text-foreground">8+ anos</span> construindo negócios com tecnologia</p></div>' +
+              '<div class="flex items-start gap-3"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/15 text-xs font-semibold text-accent">03</span><p class="text-sm text-foreground">Alunos saindo do zero a <span class="font-medium text-foreground">6 dígitos em faturamento</span></p></div>' +
+            '</div>' +
+            '<div class="mt-7 rounded-xl bg-accent/8 border border-accent/20 px-4 py-3">' +
+              '<p class="text-xs text-muted-foreground"><span class="font-semibold text-foreground">⚠️ Placeholder:</span> trocar pelos números reais do Fred antes de publicar.</p>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</section>';
+  injectBefore('<section id="metodo"', html, 'autoridade-fred');
+}
+
+// --- 9.2) Pra Quem É + Outcomes (antes de #comunidade) ---
+{
+  const icp = [
+    'Você quer criar um negócio novo usando IA e não sabe por onde começar.',
+    'Você já tem negócio e quer usar IA pra escalar: vender mais operando com menos.',
+    'Você quer solução pronta, plug and play, pra aplicar rápido sem ficar técnico.',
+  ];
+  const outcomes = [
+    ['📇', 'Criar o próprio CRM', 'Em vez de pagar mensalidade de plataforma cara.'],
+    ['💬', 'Automatizar o WhatsApp', 'Atendimento que não perde cliente, com agente de IA.'],
+    ['🌐', 'Montar o site do negócio', 'Sem depender de agência ou ficar refém de freelancer.'],
+    ['📱', 'Gerar post pras redes', 'Quase no piloto automático, mantendo a sua voz.'],
+    ['⚙️', 'Automatizar processo interno', 'Tarefa repetitiva da operação rodando sozinha.'],
+    ['💰', 'Criar novos produtos', 'Ofertas, infoprodutos e serviços novos pra vender mais.'],
+  ];
+  const icpHtml = icp.map(t =>
+    '<div class="rounded-2xl border border-accent/35 bg-frame p-5 transition-transform duration-500 hover:scale-[1.02]"><div class="flex items-start gap-3"><span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/15 text-[11px] font-semibold text-accent">✓</span><p class="text-sm leading-relaxed text-foreground">' + t + '</p></div></div>'
+  ).join('');
+  const outcomesHtml = outcomes.map(([emoji, head, body]) =>
+    '<div class="group rounded-2xl border border-border bg-frame p-5 transition-all duration-500 hover:border-accent/50 hover:scale-[1.02]"><div class="text-3xl mb-3 transition-transform duration-500 group-hover:scale-110">' + emoji + '</div><h3 class="text-base font-medium text-foreground mb-1">' + head + '</h3><p class="text-sm text-muted-foreground leading-relaxed">' + body + '</p></div>'
+  ).join('');
+  const html =
+    '<section data-copy-v3="pra-quem-e" class="w-full bg-background px-6 py-20 sm:py-28">' +
+      '<div class="mx-auto max-w-6xl">' +
+        '<div class="mb-12 max-w-3xl" style="opacity: 1; transform: none;">' +
+          '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Pra quem é</div>' +
+          '<h2 class="mt-5 text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-[3.25rem]">Isso aqui é pra você se...</h2>' +
+        '</div>' +
+        '<div class="grid gap-4 sm:grid-cols-3 mb-10" style="opacity: 1; transform: none;">' + icpHtml + '</div>' +
+        '<p class="mb-12 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">E não importa o nível. Tem trilha pra quem não sabe nada, pra quem é intermediário e pra quem já é avançado. Cada um entra no ponto certo e evolui no próprio ritmo.</p>' +
+        '<div class="mb-8 max-w-3xl">' +
+          '<p class="text-sm font-medium uppercase tracking-[0.16em] text-accent mb-3">O que você sai sabendo fazer</p>' +
+          '<h3 class="text-2xl font-medium text-foreground sm:text-3xl">Resultado prático, do primeiro dia.</h3>' +
+        '</div>' +
+        '<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" style="opacity: 1; transform: none;">' + outcomesHtml + '</div>' +
+        '<p class="mt-10 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">Você economiza criando suas próprias ferramentas, automatiza o que é chato, e sobra tempo pra focar no que traz resultado.</p>' +
+      '</div>' +
+    '</section>';
+  injectBefore('<section id="comunidade"', html, 'pra-quem-e');
+}
+
+// --- 9.3) Encontros ao Vivo (antes de #modulos) ---
+{
+  const html =
+    '<section data-copy-v3="encontros-ao-vivo" class="w-full bg-background px-6 py-20 sm:py-28">' +
+      '<div class="mx-auto max-w-5xl">' +
+        '<div class="mb-12 text-center" style="opacity: 1; transform: none;">' +
+          '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Toda quarta · 17h Portugal · Ao vivo</div>' +
+          '<h2 class="mt-5 text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-[3.25rem]">Conteúdo gravado te ensina. Encontro ao vivo te destrava.</h2>' +
+          '<p class="mt-5 max-w-2xl mx-auto text-base leading-relaxed text-muted-foreground sm:text-lg">O que trava o empresário não é falta de aula. É não ter pra quem mostrar o que está construindo agora. Por isso o Clube tem 4 encontros ao vivo todo mês.</p>' +
+        '</div>' +
+        '<div class="grid gap-5 sm:grid-cols-3 mb-10" style="opacity: 1; transform: none;">' +
+          '<div class="group rounded-2xl border border-accent/35 bg-frame p-6 transition-all duration-500 hover:scale-[1.02]"><div class="text-3xl mb-3 transition-transform duration-500 group-hover:scale-110">🎙️</div><h3 class="text-lg font-medium text-foreground mb-2">1 encontro com Fred</h3><p class="text-sm text-muted-foreground leading-relaxed">Você traz a dúvida do seu projeto e sai com o próximo passo concreto.</p></div>' +
+          '<div class="group rounded-2xl border border-accent/35 bg-frame p-6 transition-all duration-500 hover:scale-[1.02]"><div class="text-3xl mb-3 transition-transform duration-500 group-hover:scale-110">🤝</div><h3 class="text-lg font-medium text-foreground mb-2">3 encontros com convidados</h3><p class="text-sm text-muted-foreground leading-relaxed">Gente que já está escalando com IA, dividindo o que está funcionando agora.</p></div>' +
+          '<div class="group rounded-2xl border border-accent/35 bg-frame p-6 transition-all duration-500 hover:scale-[1.02]"><div class="text-3xl mb-3 transition-transform duration-500 group-hover:scale-110">🔁</div><h3 class="text-lg font-medium text-foreground mb-2">Replay completo</h3><p class="text-sm text-muted-foreground leading-relaxed">Não pôde quarta às 17h? A gravação fica na sua biblioteca pra sempre.</p></div>' +
+        '</div>' +
+        '<div class="relative overflow-hidden rounded-[2rem] border border-accent/35 bg-[linear-gradient(135deg,rgba(230,81,0,0.18),rgba(230,81,0,0.06)_60%,rgba(230,81,0,0)_100%)] p-8 sm:p-10 text-center" style="opacity: 1; transform: none;">' +
+          '<div class="text-6xl sm:text-7xl font-bold text-accent mb-2">48</div>' +
+          '<p class="text-lg font-medium text-foreground">encontros ao vivo por ano</p>' +
+          '<p class="mt-3 text-sm text-muted-foreground max-w-md mx-auto">Toda semana tem alguém de verdade olhando o que você está construindo.</p>' +
+        '</div>' +
+      '</div>' +
+    '</section>';
+  injectBefore('<section id="modulos"', html, 'encontros-ao-vivo');
+}
+
+// --- 9.4) Bônus extras (#2, #3, #4) — injetado APÓS a seção InfiZap ---
+// A seção InfiZap atual fica como está; abaixo dela injetamos 3 cards
+// com os outros bônus, num grid 3 colunas.
+{
+  const bonuses = [
+    ['02', 'Roadmap dos 7 Primeiros Dias', 'Passo a passo do que fazer na primeira semana pra já subir algo no ar.', '€247'],
+    ['03', 'Pacote de Templates e Prompts', 'Prompts e templates prontos por setor, pra copiar, colar e usar no seu negócio.', '€297'],
+    ['04', '48 Encontros Gravados', 'Toda live fica na sua biblioteca, pra sempre. Você nunca perde uma quarta.', 'Incluído'],
+  ];
+  const cardsHtml = bonuses.map(([num, title, desc, value]) =>
+    '<div class="relative overflow-hidden rounded-[2rem] border border-accent/35 bg-[linear-gradient(180deg,rgba(230,81,0,0.14),rgba(230,81,0,0.05)_50%,rgba(230,81,0,0)_100%)] p-6 sm:p-7 transition-all duration-500 hover:scale-[1.02]" style="opacity: 1; transform: none;">' +
+      '<div class="flex items-center justify-between mb-5">' +
+        '<span class="text-xs font-medium uppercase tracking-[0.18em] text-accent">Bônus ' + num + '</span>' +
+        '<span class="text-xs font-medium text-muted-foreground">Valor: <span class="text-foreground">' + value + '</span></span>' +
+      '</div>' +
+      '<h3 class="text-xl font-medium text-foreground mb-2 leading-tight">' + title + '</h3>' +
+      '<p class="text-sm text-muted-foreground leading-relaxed">' + desc + '</p>' +
+    '</div>'
+  ).join('');
+  const html =
+    '<section data-copy-v3="bonus-extras" class="w-full bg-background px-6 pb-20 sm:pb-28">' +
+      '<div class="mx-auto max-w-6xl">' +
+        '<div class="mb-10 max-w-3xl" style="opacity: 1; transform: none;">' +
+          '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Entrando hoje você ainda leva</div>' +
+          '<h2 class="mt-5 text-3xl font-medium tracking-tight text-foreground sm:text-4xl lg:text-5xl">Mais 3 bônus pra você não ter desculpa.</h2>' +
+        '</div>' +
+        '<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">' + cardsHtml + '</div>' +
+      '</div>' +
+    '</section>';
+  // Anchor: inject right before #pricing (depois da seção InfiZap).
+  injectBefore('<section id="pricing"', html, 'bonus-extras');
+}
+
+// --- 9.5) Prova Social (depois de bônus extras, antes de #pricing) ---
+{
+  const testimonials = [
+    ['Trocar', 'setor pessoal', 'Trocar texto: problema X → o que fez no Clube → resultado em N dias.'],
+    ['Trocar', 'setor pessoal', 'Trocar texto: problema Y → o que fez no Clube → resultado em N dias.'],
+    ['Trocar', 'setor pessoal', 'Trocar texto: problema Z → o que fez no Clube → resultado em N dias.'],
+  ];
+  const cardsHtml = testimonials.map(([name, setor, txt]) =>
+    '<div class="rounded-2xl border border-border bg-frame p-6 transition-all duration-500 hover:border-accent/50 hover:scale-[1.02]" style="opacity: 1; transform: none;">' +
+      '<div class="flex items-center gap-3 mb-4"><div class="h-12 w-12 rounded-full bg-accent/15 flex items-center justify-center text-lg font-semibold text-accent">' + name.charAt(0) + '</div><div><p class="text-sm font-medium text-foreground">' + name + '</p><p class="text-xs text-muted-foreground">' + setor + '</p></div></div>' +
+      '<p class="text-sm leading-relaxed text-muted-foreground italic">⚠️ ' + txt + '</p>' +
+    '</div>'
+  ).join('');
+  const html =
+    '<section data-copy-v3="prova-social" class="w-full bg-background px-6 pb-20 sm:pb-28">' +
+      '<div class="mx-auto max-w-6xl">' +
+        '<div class="mb-10 text-center" style="opacity: 1; transform: none;">' +
+          '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Prova social</div>' +
+          '<h2 class="mt-5 text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-[3.25rem]">Empresário de verdade, resultado de verdade.</h2>' +
+        '</div>' +
+        '<div class="grid gap-4 sm:grid-cols-3">' + cardsHtml + '</div>' +
+        '<p class="mt-6 text-center text-xs text-muted-foreground">⚠️ Placeholders: trocar pelos depoimentos reais antes de publicar.</p>' +
+      '</div>' +
+    '</section>';
+  injectBefore('<section id="pricing"', html, 'prova-social');
+}
+
+// --- 9.6) Ancoragem + Value Stack (DENTRO de #pricing, antes do card €297) ---
+{
+  const aluga = [
+    ['CRM (plataforma de gestão de clientes)', '€600 a €1.800'],
+    ['Ferramenta de atendimento/automação no WhatsApp', '€1.200'],
+    ['Site feito por agência', '€1.500 a €3.000'],
+    ['Gestão de social / criação de conteúdo', '€3.600 a €6.000'],
+    ['Consultor de IA (€150/hora)', 'Incalculável'],
+  ];
+  const stack = [
+    ['48 encontros ao vivo/ano (12 com Fred + 36 convidados)', '€1.997'],
+    ['Cursos e trilhas completas + aulas novas todo mês', '€1.497'],
+    ['Biblioteca de ferramentas prontas (plug and play)', '€497'],
+    ['Comunidade ativa + networking', '€497'],
+    ['Bônus 1 a 4 (InfiZap, Roadmap, Templates, Gravações)', '€691'],
+  ];
+  const alugaHtml = aluga.map(([item, val]) =>
+    '<div class="flex items-center justify-between py-3 border-b border-border last:border-b-0"><span class="text-sm text-foreground">' + item + '</span><span class="text-sm font-medium text-muted-foreground whitespace-nowrap ml-3">' + val + '</span></div>'
+  ).join('');
+  const stackHtml = stack.map(([item, val]) =>
+    '<div class="flex items-center justify-between py-3 border-b border-border last:border-b-0"><span class="text-sm text-foreground">' + item + '</span><span class="text-sm font-medium text-foreground whitespace-nowrap ml-3">' + val + '</span></div>'
+  ).join('');
+  const html =
+    '<div data-copy-v3="ancoragem-value-stack" class="mx-auto max-w-5xl mb-12 sm:mb-16">' +
+      '<div class="grid gap-5 lg:grid-cols-2" style="opacity: 1; transform: none;">' +
+        '<div class="rounded-2xl border border-border bg-frame p-6 sm:p-7">' +
+          '<p class="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground mb-1">O custo de continuar como está</p>' +
+          '<h3 class="text-xl font-medium text-foreground mb-5">O que você aluga hoje</h3>' +
+          alugaHtml +
+        '</div>' +
+        '<div class="rounded-2xl border border-accent/35 bg-[linear-gradient(180deg,rgba(230,81,0,0.10),rgba(230,81,0,0.03)_60%,rgba(230,81,0,0)_100%)] p-6 sm:p-7">' +
+          '<p class="text-xs font-medium uppercase tracking-[0.16em] text-accent mb-1">O que entra no acesso</p>' +
+          '<h3 class="text-xl font-medium text-foreground mb-5">Tudo isso no Clube Infinity</h3>' +
+          stackHtml +
+          '<div class="flex items-center justify-between pt-4 mt-2 border-t-2 border-accent/30"><span class="text-base font-semibold text-foreground">Valor total</span><span class="text-2xl font-bold text-accent">€5.179</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<p class="mt-8 text-center text-base sm:text-lg text-foreground"><span class="font-semibold">No Clube Infinity você aprende a fazer tudo isso você mesmo.</span> <span class="text-muted-foreground">Uma vez. Pra sempre.</span></p>' +
+    '</div>';
+  // Anchor: dentro de #pricing, antes do mb-12 text-center do card de preço.
+  // Procura o div externo do pricing-section.
+  const pricingAnchor = '<section id="pricing" class="w-full bg-background px-6 py-20 sm:py-28 scroll-mt-24"><div class="mx-auto max-w-5xl">';
+  if (s.indexOf('data-copy-v3="ancoragem-value-stack"') >= 0) {
+    newSections['ancoragem-value-stack'] = 'skip (já existe)';
+  } else {
+    const i = s.indexOf(pricingAnchor);
+    if (i < 0) {
+      newSections['ancoragem-value-stack'] = 'NO ANCHOR';
+    } else {
+      const inject = i + pricingAnchor.length;
+      s = s.slice(0, inject) + html + s.slice(inject);
+      newSections['ancoragem-value-stack'] = 'OK';
+    }
+  }
+}
+
+// --- 9.7) Garantia 7 dias (depois de #pricing, antes do FAQ) ---
+{
+  const html =
+    '<section data-copy-v3="garantia-7-dias" class="w-full bg-background px-6 py-20 sm:py-28">' +
+      '<div class="mx-auto max-w-3xl">' +
+        '<div class="relative overflow-hidden rounded-[2rem] border border-accent/40 bg-[linear-gradient(135deg,rgba(230,81,0,0.16),rgba(230,81,0,0.04)_60%,rgba(230,81,0,0)_100%)] p-8 sm:p-10 text-center" style="opacity: 1; transform: none;">' +
+          '<div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/15 mb-5">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E65100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>' +
+          '</div>' +
+          '<h2 class="text-3xl font-medium tracking-tight text-foreground sm:text-4xl lg:text-5xl">7 dias de garantia. O risco é todo meu.</h2>' +
+          '<p class="mt-5 max-w-xl mx-auto text-base leading-relaxed text-muted-foreground sm:text-lg">Entre, faça os cursos, participe do primeiro encontro ao vivo, use as ferramentas e a comunidade. Se em 7 dias você achar que não valeu, é só pedir: devolvo 100% do seu dinheiro, sem perguntas e sem burocracia.</p>' +
+          '<p class="mt-5 max-w-xl mx-auto text-sm leading-relaxed text-foreground"><span class="font-medium">A única coisa que você arrisca de verdade</span> é continuar mais um ano pagando ferramenta cara e fazendo tudo no operacional.</p>' +
+        '</div>' +
+      '</div>' +
+    '</section>';
+  injectBefore('<section class="w-full px-6 py-20 sm:py-28"><div class="mx-auto max-w-3xl">', html, 'garantia-7-dias');
+}
+
 fs.writeFileSync(path, s, 'utf8');
 console.log('nav brand mark swaps:', navSwaps);
 console.log('hero image swaps:', heroSwaps);
@@ -577,3 +827,4 @@ console.log('copy v3 swaps:', copyV3Count, '/ blur paragraph rebuilt:', blurSwap
 console.log('footer CTA bg premium swaps:', footerCtaBgSwaps);
 console.log('section pills border-accent swaps:', sectionPillsCount);
 console.log('hero BG premium swaps:', heroBgSwaps);
+console.log('novas dobras v3:', JSON.stringify(newSections, null, 0));
