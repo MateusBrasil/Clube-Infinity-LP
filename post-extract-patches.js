@@ -782,7 +782,13 @@ const mocks = {
           // RIGHT — Headline + Quote + Stats
           '<div style="animation: clube-rise 700ms cubic-bezier(0.16,1,0.3,1) backwards; animation-delay: 250ms;">' +
             '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Quem está do outro lado</div>' +
-            '<h2 class="mt-5 text-5xl sm:text-6xl font-semibold tracking-tight text-foreground leading-[1.02]">Quem te guia <span class="text-accent">já fez</span> o caminho que você quer fazer.</h2>' +
+            // Headline tipograficamente dramatica: tamanhos misturados, ritmo de respiracao.
+            // "Quem te guia" pequeno → "JÁ FEZ" gigante accent → "o caminho..." medio.
+            '<h2 class="mt-6 tracking-tight text-foreground leading-[0.92]">' +
+              '<span class="block text-2xl sm:text-3xl font-medium text-muted-foreground mb-2">Quem te guia</span>' +
+              '<span class="block text-6xl sm:text-7xl lg:text-8xl font-bold text-accent">já fez.</span>' +
+              '<span class="block text-3xl sm:text-4xl font-medium text-foreground/85 mt-3 leading-tight">o caminho que <span class="italic font-light">você</span> quer fazer.</span>' +
+            '</h2>' +
             // Quote callout
             '<div class="relative mt-7 rounded-2xl border border-accent/30 bg-frame p-6 sm:p-7">' +
               '<p class="text-base sm:text-lg leading-relaxed text-foreground">"Há 8+ anos eu ajudo empresário a usar tecnologia pra vender mais e trabalhar menos. <span class="text-accent font-medium">Não sou programador de carteirinha</span>, e é exatamente por isso que sei traduzir IA pra linguagem de quem toca um negócio de verdade."</p>' +
@@ -816,26 +822,59 @@ const mocks = {
     '</div>'
   ).join('');
 
+  // BENTO asymmetric — quebra a uniformidade. 6 outcomes em escalas variadas:
+  // Row 1 (3 cols): CRM | Site | Instagram         (3 small)
+  // Row 2 (3 cols): WhatsApp HERO (col-span-2)     | Workflow
+  // Row 3 (3 cols): Produto (col-span-3 full)
+  // Card BIG (whatsapp) tem peso maior — title text-2xl em vez de text-base.
+  // Card FULL (produto) horizontal: icon esq + texto centro + mock direita.
   const outcomes = [
-    ['database', 'Criar o próprio CRM', 'Em vez de pagar mensalidade de plataforma cara.', 'crm'],
-    ['brand:https://cdn.simpleicons.org/whatsapp/25D366', 'Automatizar o WhatsApp', 'Atendimento que não perde cliente, com agente de IA.', 'whatsapp'],
-    ['globe', 'Montar o site do negócio', 'Sem depender de agência ou refém de freelancer.', 'site'],
-    ['brand:https://cdn.simpleicons.org/instagram/E4405F', 'Gerar post pras redes', 'Quase no piloto automático, mantendo a sua voz.', 'instagram'],
-    ['settings', 'Automatizar processo interno', 'Tarefa repetitiva da operação rodando sozinha.', 'workflow'],
-    ['dollar', 'Criar novos produtos', 'Ofertas, infoprodutos e serviços novos pra vender mais.', 'product'],
+    ['database', 'Criar o próprio CRM', 'Em vez de pagar mensalidade cara.', 'crm', 1],
+    ['globe', 'Montar o site', 'Sem refém de agência.', 'site', 1],
+    ['brand:https://cdn.simpleicons.org/instagram/E4405F', 'Gerar post pras redes', 'Quase no piloto automático.', 'instagram', 1],
+    ['brand:https://cdn.simpleicons.org/whatsapp/25D366', 'Automatizar o WhatsApp', 'Agente de IA que atende 24h, fecha venda e não perde cliente.', 'whatsapp', 2],
+    ['settings', 'Automatizar processo', 'Tarefa repetitiva rodando sozinha.', 'workflow', 1],
+    ['dollar', 'Criar novos produtos', 'Ofertas, infoprodutos e serviços novos pra escalar caixa.', 'product', 3],
   ];
-  const outcomesHtml = outcomes.map(([icon, head, body, mockKey], idx) => {
+  const spanClass = (sp) => sp === 2 ? 'lg:col-span-2' : sp === 3 ? 'lg:col-span-3' : 'lg:col-span-1';
+  const outcomesHtml = outcomes.map(([icon, head, body, mockKey, span], idx) => {
     const isBrand = icon.startsWith('brand:');
+    const isBig = span === 2;
+    const isFull = span === 3;
     const iconBoxCls = isBrand
       ? 'inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white border border-accent/20 shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3'
       : 'inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-accent transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3';
-    return '<div class="group relative overflow-hidden rounded-2xl border border-accent/35 bg-[linear-gradient(180deg,rgba(230,81,0,0.10),rgba(230,81,0,0.03)_60%,rgba(230,81,0,0)_100%)] p-5 transition-all duration-500 hover:scale-[1.02] hover:border-accent/60 hover:shadow-[0_12px_32px_-16px_rgba(230,81,0,0.5)]" style="animation: clube-rise 600ms cubic-bezier(0.16,1,0.3,1) backwards; animation-delay: ' + (80 + idx * 60) + 'ms;">' +
+    const titleCls = isBig
+      ? 'text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight'
+      : isFull
+        ? 'text-xl sm:text-2xl font-bold text-foreground mb-1 leading-tight'
+        : 'text-base font-semibold text-foreground mb-1 leading-tight';
+    const bodyCls = isBig
+      ? 'text-base text-muted-foreground leading-relaxed'
+      : 'text-sm text-muted-foreground leading-relaxed';
+    const cardCls = 'group relative overflow-hidden rounded-2xl border border-accent/35 bg-[linear-gradient(180deg,rgba(230,81,0,0.10),rgba(230,81,0,0.03)_60%,rgba(230,81,0,0)_100%)] p-5 ' + (isBig ? 'sm:p-7 ' : '') + 'transition-all duration-500 hover:scale-[1.02] hover:border-accent/60 hover:shadow-[0_12px_32px_-16px_rgba(230,81,0,0.5)] ' + spanClass(span);
+    // Layout horizontal pro card full-width (Produto)
+    if (isFull) {
+      return '<div class="' + cardCls + '" style="animation: clube-rise 600ms cubic-bezier(0.16,1,0.3,1) backwards; animation-delay: ' + (80 + idx * 60) + 'ms;">' +
+        '<div class="grid gap-5 lg:grid-cols-[auto_1fr_auto] items-center">' +
+          '<div class="' + iconBoxCls + '" style="width:56px;height:56px;border-radius:16px">' + renderIcon(icon, 26) + '</div>' +
+          '<div>' +
+            '<div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">0' + (idx + 1) + '</span><span class="h-px w-8 bg-accent/40"></span></div>' +
+            '<h3 class="' + titleCls + '">' + head + '</h3>' +
+            '<p class="' + bodyCls + '">' + body + '</p>' +
+          '</div>' +
+          '<div class="hidden lg:block min-w-[260px]">' + mocks[mockKey] + '</div>' +
+        '</div>' +
+        '<div class="lg:hidden mt-4">' + mocks[mockKey] + '</div>' +
+      '</div>';
+    }
+    return '<div class="' + cardCls + '" style="animation: clube-rise 600ms cubic-bezier(0.16,1,0.3,1) backwards; animation-delay: ' + (80 + idx * 60) + 'ms;">' +
       '<div class="flex items-start justify-between mb-3">' +
         '<div class="' + iconBoxCls + '">' + renderIcon(icon, 20) + '</div>' +
         '<span class="text-[10px] font-medium uppercase tracking-[0.16em] text-accent/70">0' + (idx + 1) + '</span>' +
       '</div>' +
-      '<h3 class="text-base font-semibold text-foreground mb-1 leading-tight">' + head + '</h3>' +
-      '<p class="text-sm text-muted-foreground leading-relaxed">' + body + '</p>' +
+      '<h3 class="' + titleCls + '">' + head + '</h3>' +
+      '<p class="' + bodyCls + '">' + body + '</p>' +
       mocks[mockKey] +
     '</div>';
   }).join('');
@@ -1155,9 +1194,14 @@ const mocks = {
               '</div>' +
               '<h3 class="text-2xl font-semibold text-foreground mb-5 mt-2">Tudo isso no Clube Infinity</h3>' +
               stackHtml +
-              '<div class="flex items-center justify-between pt-5 mt-3 border-t-2 border-accent/40">' +
-                '<span class="text-base font-semibold text-foreground">Valor total entregue</span>' +
-                '<span class="text-4xl font-bold text-accent leading-none">€<span class="clube-counter"></span></span>' +
+              // Total dramatico: label compacta, numero gigante alinhado direita.
+              // Counter anima 0 → 5179 quando o elemento entra na viewport.
+              '<div class="pt-6 mt-4 border-t-2 border-accent/40">' +
+                '<p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-1">Valor total entregue</p>' +
+                '<div class="flex items-baseline gap-2 leading-none">' +
+                  '<span class="text-2xl sm:text-3xl font-bold text-accent">€</span>' +
+                  '<span class="text-6xl sm:text-7xl font-bold tracking-tighter text-accent clube-counter"></span>' +
+                '</div>' +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -1204,7 +1248,11 @@ const mocks = {
               '</div>' +
               '<div class="text-center max-w-2xl mx-auto">' +
                 '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent mb-4">Garantia incondicional</div>' +
-                '<h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-foreground leading-tight">7 dias de garantia. <span class="text-accent">O risco é todo meu.</span></h2>' +
+                // Headline em 2 atos: "7 dias" gigante + linha forte abaixo.
+                '<h2 class="tracking-tight text-foreground leading-[0.95]">' +
+                  '<span class="block text-7xl sm:text-8xl lg:text-9xl font-bold text-accent">7 dias.</span>' +
+                  '<span class="block text-2xl sm:text-3xl font-medium text-foreground mt-3">De garantia. <span class="italic font-light text-muted-foreground">O risco é todo meu.</span></span>' +
+                '</h2>' +
                 '<p class="mt-5 text-base sm:text-lg leading-relaxed text-muted-foreground">Entre, faça os cursos, participe do primeiro encontro ao vivo, use as ferramentas e a comunidade. Se em 7 dias você achar que não valeu, é só pedir: devolvo 100% do seu dinheiro, sem perguntas e sem burocracia.</p>' +
                 '<p class="mt-4 text-sm leading-relaxed text-foreground"><span class="font-semibold">A única coisa que você arrisca de verdade</span> <span class="text-muted-foreground">é continuar mais um ano pagando ferramenta cara e fazendo tudo no operacional.</span></p>' +
               '</div>' +

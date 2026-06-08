@@ -197,6 +197,16 @@ body {
   to   { opacity: 1; transform: translateX(0); }
 }
 
+/* col-span lg utilities — Tailwind compilado do Auryon nao tem estas variantes
+   responsive. Necessario pra bento layouts do outcome (9.2) e dos cards
+   maiores nas dobras v3. */
+@media (min-width: 1024px) {
+  .lg\:col-span-1 { grid-column: span 1 / span 1 !important; }
+  .lg\:col-span-2 { grid-column: span 2 / span 2 !important; }
+  .lg\:col-span-3 { grid-column: span 3 / span 3 !important; }
+  .lg\:row-span-2 { grid-row: span 2 / span 2 !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .clube-counter { animation: none; }
   .clube-counter::after { content: '5179'; }
