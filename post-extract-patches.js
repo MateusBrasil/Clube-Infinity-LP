@@ -757,10 +757,9 @@ const mocks = {
             '<div class="inline-flex items-center rounded-full border border-accent bg-frame px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent">Quem está do outro lado</div>' +
             '<h2 class="mt-5 text-5xl sm:text-6xl font-semibold tracking-tight text-foreground leading-[1.02]">Quem te guia <span class="text-accent">já fez</span> o caminho que você quer fazer.</h2>' +
             // Quote callout
-            '<div class="relative mt-7 rounded-2xl border border-accent/30 bg-frame p-6 sm:p-7 overflow-hidden">' +
-              '<div class="absolute -top-3 -right-3 text-accent/10 pointer-events-none">' + svgIcon(I.quote, 96) + '</div>' +
-              '<p class="relative text-base sm:text-lg leading-relaxed text-foreground">"Há 8+ anos eu ajudo empresário a usar tecnologia pra vender mais e trabalhar menos. <span class="text-accent font-medium">Não sou programador de carteirinha</span>, e é exatamente por isso que sei traduzir IA pra linguagem de quem toca um negócio de verdade."</p>' +
-              '<p class="relative mt-4 text-sm text-muted-foreground">— Fred Martins</p>' +
+            '<div class="relative mt-7 rounded-2xl border border-accent/30 bg-frame p-6 sm:p-7">' +
+              '<p class="text-base sm:text-lg leading-relaxed text-foreground">"Há 8+ anos eu ajudo empresário a usar tecnologia pra vender mais e trabalhar menos. <span class="text-accent font-medium">Não sou programador de carteirinha</span>, e é exatamente por isso que sei traduzir IA pra linguagem de quem toca um negócio de verdade."</p>' +
+              '<p class="mt-4 text-sm text-muted-foreground">— Fred Martins</p>' +
             '</div>' +
             // 3 micro-stats verticais
             '<div class="mt-7 grid grid-cols-3 gap-3">' +
@@ -1020,7 +1019,6 @@ const mocks = {
   // Hero testimonial
   const heroTest =
     '<div class="group relative overflow-hidden rounded-[2rem] border border-accent/40 bg-[linear-gradient(135deg,rgba(230,81,0,0.14),rgba(230,81,0,0.04)_60%,rgba(230,81,0,0)_100%)] p-7 sm:p-8 lg:col-span-2 lg:row-span-2 transition-all duration-500 hover:scale-[1.01] hover:border-accent/60 hover:shadow-[0_20px_50px_-20px_rgba(230,81,0,0.45)]" style="animation: clube-rise 700ms cubic-bezier(0.16,1,0.3,1) backwards; animation-delay: 100ms;">' +
-      '<div class="absolute -top-4 -right-4 text-accent/12 pointer-events-none transition-transform duration-700 group-hover:rotate-6">' + svgIcon(I.quote, 120) + '</div>' +
       '<div class="relative">' +
         '<div class="flex items-center gap-4 mb-5">' +
           '<div class="h-16 w-16 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-[0_8px_20px_-4px_rgba(230,81,0,0.5)]" style="background: linear-gradient(135deg,#E65100 0%,#FF6B00 100%);">MC</div>' +
