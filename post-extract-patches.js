@@ -118,6 +118,25 @@ for (const [from, to] of arrowBoxBefore) {
   }
 }
 
+// ===== 2d-2) Magnetic CTAs — adiciona data-magnetic nos 3 CTAs principais =====
+// Os 3 CTAs "Quero entrar no Clube Infinity" (Hero / Pricing / Footer form)
+// ganham data-magnetic — o LandingInteractivity detecta e aplica magnetic
+// hover (cursor a até 120px puxa o botao em direcao). Force 0.25, snap-back
+// 400ms cubic-bezier. So roda em hover devices (touch fica normal).
+{
+  const ctaIds = [
+    'c9b27ffa-f223-23f9-0322-6cb34f7e10a7', // Hero CTA <a>
+    '474b5651-15ff-0ca5-daf3-667c952f157e', // Pricing card CTA <a>
+    '3cd8112d-d755-5b51-7c1d-8cace9378bc7', // Footer form submit <button>
+  ];
+  ctaIds.forEach((id) => {
+    const marker = 'id="' + id + '"';
+    if (s.indexOf(marker) >= 0 && s.indexOf(marker + ' data-magnetic') < 0) {
+      s = s.split(marker).join(marker + ' data-magnetic="true"');
+    }
+  });
+}
+
 // ===== 2e-pre) Discord card → imagem Circle custom =====
 // Substitui o card Discord (Building The Next Big Thing) pela imagem
 // oficial do grupo Circle do Clube Infinity.
@@ -728,7 +747,15 @@ const mocks = {
             '<div class="absolute -inset-3 rounded-[2.5rem] bg-accent/40 blur-3xl opacity-40 group-hover:opacity-70 transition-opacity duration-700" style="animation: clube-glow-pulse 4s ease-in-out infinite;"></div>' +
             '<div class="relative rounded-[2rem] border border-accent/40 shadow-[0_30px_80px_-20px_rgba(230,81,0,0.55)] overflow-hidden bg-frame">' +
               '<div class="relative aspect-[4/5]">' +
-                '<img src="/brand/fred.png" alt="Fred Martins" class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async">' +
+                // Foto otimizada via Sharp: 1.7MB PNG → 28KB WebP (98% redução).
+                // <picture> com srcset WebP + fallback PNG pra browsers antigos.
+                // Photo treatment: saturate(0.95) contrast(1.05) brightness(0.98) — vira "frame de cinema".
+                '<picture>' +
+                  '<source srcset="/brand/fred.webp" type="image/webp">' +
+                  '<img src="/brand/fred.png" alt="Fred Martins" width="800" height="1067" class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" style="filter: saturate(0.95) contrast(1.05) brightness(0.98);">' +
+                '</picture>' +
+                // Vignette cinematográfica (sutil, valoriza o sujeito no centro)
+                '<div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.32) 100%);" aria-hidden="true"></div>' +
                 // LIVE badge shimmer
                 '<div class="absolute top-5 left-5 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white shadow-lg" style="background: linear-gradient(90deg, #E65100 0%, #FF6B00 50%, #E65100 100%); background-size: 200% 100%; animation: clube-shimmer 3s linear infinite;">' +
                   '<span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full rounded-full bg-white opacity-75 animate-ping"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span></span>' +

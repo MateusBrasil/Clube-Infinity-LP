@@ -201,3 +201,18 @@ body {
   .clube-counter { animation: none; }
   .clube-counter::after { content: '5179'; }
 }
+
+/* Progressive enhancement: scroll-driven animations onde o browser suportar.
+   Sobrescreve o clube-rise page-load pra scroll-triggered nos elementos
+   com a animação inline. Quem usa Chrome 115+ / Safari 26+ vê cards entrando
+   conforme scroll. Browsers antigos veem o page-load staggered (status quo).
+   Mantemos animation-delay inline pra preservar o efeito cascade dentro de
+   cada section quando aparecem juntas. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [style*="clube-rise"] {
+      animation-timeline: view();
+      animation-range: entry 5% cover 25%;
+    }
+  }
+}

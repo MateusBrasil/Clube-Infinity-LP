@@ -196,6 +196,57 @@ export function LandingInteractivity() {
     window.addEventListener('scroll', onProgressScroll, { passive: true });
     window.addEventListener('resize', onProgressScroll);
 
+    // ===== Magnetic CTAs (cursor "puxa" o botão) =====
+    // Padrão cinema-grade: cursor a até ~120px do CTA → o botão se move
+    // sutilmente em direção ao cursor (force 0.25, snap-back com transition).
+    // Só roda em hover devices (desabilita em touch). Targeta elementos com
+    // [data-magnetic] (CTAs principais Hero/Pricing/Footer).
+    const supportsHover = typeof window !== 'undefined' &&
+      window.matchMedia('(hover: hover)').matches;
+    const magnetEls = supportsHover
+      ? Array.from(document.querySelectorAll<HTMLElement>('[data-magnetic]'))
+      : [];
+    const magnetState = new Map<HTMLElement, { active: boolean }>();
+    magnetEls.forEach((el) => {
+      el.style.transition = 'transform 400ms cubic-bezier(0.16, 1, 0.3, 1)';
+      el.style.willChange = 'transform';
+      magnetState.set(el, { active: false });
+    });
+    let magnetRaf = 0;
+    let lastMouse: { x: number; y: number } | null = null;
+    const updateMagnet = () => {
+      magnetRaf = 0;
+      if (!lastMouse) return;
+      magnetEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = lastMouse!.x - cx;
+        const dy = lastMouse!.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = 120; // raio de detecção
+        const force = 0.25; // intensidade do puxão
+        const state = magnetState.get(el)!;
+        if (dist < radius) {
+          const tx = dx * force;
+          const ty = dy * force;
+          el.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px)`;
+          state.active = true;
+        } else if (state.active) {
+          el.style.transform = 'translate(0, 0)';
+          state.active = false;
+        }
+      });
+    };
+    const onMagnetMove = (e: MouseEvent) => {
+      lastMouse = { x: e.clientX, y: e.clientY };
+      if (magnetRaf) return;
+      magnetRaf = window.requestAnimationFrame(updateMagnet);
+    };
+    if (magnetEls.length > 0) {
+      window.addEventListener('mousemove', onMagnetMove, { passive: true });
+    }
+
     // ===== Smooth scroll em âncoras =====
     const anchors = document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]');
     const anchorHandlers: Array<{ el: Element; fn: EventListener }> = [];
@@ -225,6 +276,10 @@ export function LandingInteractivity() {
       window.removeEventListener('scroll', onProgressScroll);
       window.removeEventListener('resize', onProgressScroll);
       if (progressRaf) cancelAnimationFrame(progressRaf);
+      if (magnetEls.length > 0) {
+        window.removeEventListener('mousemove', onMagnetMove);
+      }
+      if (magnetRaf) cancelAnimationFrame(magnetRaf);
     };
   }, []);
 
